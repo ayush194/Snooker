@@ -1,0 +1,146 @@
+# Blender MTL File: 'ball.blend'
+# Material Count: 16
+
+newmtl ball1
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_00.png
+
+newmtl ball1
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_01.png
+
+newmtl ball2
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_02.png
+
+newmtl ball3
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_03.png
+
+newmtl ball4
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_04.png
+
+newmtl ball5
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_05.png
+
+newmtl ball6
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_06.png
+
+newmtl ball7
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_07.png
+
+newmtl ball8
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_08.png
+
+newmtl ball9
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_09.png
+
+newmtl ball10
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_10.png
+
+newmtl ball11
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_11.png
+
+newmtl ball12
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_12.png
+
+newmtl ball13
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_13.png
+
+newmtl ball14
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_14.png
+
+newmtl ball15
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd /Users/ayushk/Desktop/Snooker/textures/ball_15.png
