@@ -52,8 +52,8 @@ public:
     float zoom;
     
     // Constructor with vectors
-    Camera(glm::vec3 pos = glm::vec3(5.0f, 5.0f, 5.0f),  
-        glm::vec3 fr = glm::vec3(-1.0f, -1.0f, -1.0f), 
+    Camera(glm::vec3 pos = glm::vec3(0.0f, -5.577f, 1.026f),  
+        glm::vec3 fr = glm::vec3(0.0f, 1.0f, 0.0f), 
         glm::vec3 u = glm::vec3(0.0f, 0.0f, 1.0f)) : 
         movement_speed(_speed), mouse_sensitivity(_sensitivity), zoom(_zoom)
     {
