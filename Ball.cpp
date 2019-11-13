@@ -29,7 +29,7 @@ Ball::Ball(int id) : id(id) {
     glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void*)(2*sizeof(glm::vec3) + sizeof(glm::vec2)));
 
     this->model = glm::mat4(1.0f);
-    this->texture_id = App::loadTexture(Ball::mtls[this->id]->map_kd, id);
+    this->texture_id = loadTexture(Ball::mtls[this->id]->map_kd, id);
     printf("Ball id: %d, texture_id: %d\n", this->id, this->texture_id);
 }
 

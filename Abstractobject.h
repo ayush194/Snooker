@@ -5,7 +5,6 @@
 #include "glm_includes.h"
 #include "objloader.hpp"
 #include "shader.h"
-#include "App.h"
 
 class AbstractObject {
 public:

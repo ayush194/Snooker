@@ -11,6 +11,7 @@
 
 #include "Gamestate.h"
 #include "glm_includes.h"
+#include "stb_image/stb_image.h"
 
 #include <iostream>
 #include <vector>
@@ -18,6 +19,7 @@
 int main() {
 	App();
 	GameState* gamestate = new GameState();
+	//App::gamestate = gamestate;
 	
 	//building shaders
 	Shader pooltable_diffuse_shader("shaders/pooltable_diffuse.vs", "shaders/pooltable_diffuse.fs");
@@ -44,6 +46,7 @@ int main() {
 
 		std::cout << "entered main loop" << std::endl;
 		std::cout << "Delta time : " << App::DELTA_TIME << std::endl;
+		std::cout << "theta: " << App::CAMERA.theta << std::endl;
 
 		//create transform matrices
 		glm::mat4 view = App::getViewMatrix();

@@ -19,7 +19,7 @@ AbstractObject::AbstractObject(int id) : id(id) {
     glEnableVertexAttribArray(3);
     glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void*)(2*sizeof(glm::vec3) + sizeof(glm::vec2)));
 
-    this->texture_id = App::loadTexture(CueStick::mtls[0]->map_kd, 0);
+    this->texture_id = loadTexture(CueStick::mtls[0]->map_kd, 0);
     printf("Object id: %d, texture_id: %d\n", this->id, this->texture_id);
 }
 

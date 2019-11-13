@@ -45,8 +45,8 @@ PoolTable::PoolTable(int id) : id(id) {
     //these texture units will start pointing to the ball textures when the balls of id 0 and 1
     //are rendered. Hence the target GL_TEXTURE_2D of these two texture units should be rebound to
     //texture_id[0] and texture_id[1] before rendering.
-    this->texture_id[0] = App::loadTexture(PoolTable::mtls[0]->map_kd, 0);
-    this->texture_id[1] = App::loadTexture(PoolTable::mtls[1]->map_kd, 1);
+    this->texture_id[0] = loadTexture(PoolTable::mtls[0]->map_kd, 0);
+    this->texture_id[1] = loadTexture(PoolTable::mtls[1]->map_kd, 1);
     printf("PoolTable id: %d, texture_id[0]: %d, texture_id[1] = %d\n", this->id, this->texture_id[0], this->texture_id[1]);
 }
 

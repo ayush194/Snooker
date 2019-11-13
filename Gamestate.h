@@ -66,6 +66,7 @@ public:
 
     GameState();
     ~GameState();
+    void hit();
     void simulate();
     void setCueStick();
     void updateState();

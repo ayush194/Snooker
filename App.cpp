@@ -1,20 +1,19 @@
 #include "App.h"
 
-//stb_image.h required for texture loading
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image/stb_image.h"
-
 unsigned int App::SCR_WIDTH = 800;
 unsigned int App::SCR_HEIGHT = 600;
 float App::LAST_TIME = 0.0;
 float App::DELTA_TIME = 0.0;
-float App::CURSOR_POS_X = App::SCR_WIDTH / 2;
-float App::CURSOR_POS_Y = App::SCR_HEIGHT / 2;
+float App::CURSOR_POS[2] = {static_cast<float>(App::SCR_WIDTH) / 2, 
+                            static_cast<float>(App::SCR_HEIGHT) / 2};
+bool App::LBUTTON_DOWN = false;
+float App::LBUTTON_DOWN_CURSOR_POS[2] = {-1.0f, -1.0f};
 bool App::FIRST_MOUSE = true;
 
 // Open a window and create its OpenGL context
 GLFWwindow* App::window;
 Camera App::CAMERA = Camera();
+//GameState* App::gamestate = NULL;
 
 App::App() {
     // Initialise GLFW
@@ -41,7 +40,8 @@ App::App() {
     }
     glfwMakeContextCurrent(App::window);
     glfwSetFramebufferSizeCallback(App::window, App::framebufferSizeCallback);
-    glfwSetCursorPosCallback(App::window, App::mouseCallback);
+    glfwSetCursorPosCallback(App::window, App::cursorPosCallback);
+    glfwSetMouseButtonCallback(App::window, App::mouseButtonCallback);
     glfwSetScrollCallback(App::window, App::scrollCallback);
     //glfwSetWindowSizeCallback(window, framebuffer_size_callback);
     
@@ -138,60 +138,54 @@ void App::processInput() {
     if (glfwGetKey(App::window, GLFW_KEY_D) == GLFW_PRESS) {
         App::CAMERA.processKeyboard(RIGHT, DELTA_TIME);
     }
+    if (glfwGetKey(App::window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        App::LBUTTON_DOWN = false;
+        App::LBUTTON_DOWN_CURSOR_POS[0] = -1.0f;
+        App::LBUTTON_DOWN_CURSOR_POS[0] = -1.0f;
+        //App::gamestate->cuestick->unanimate();
+    }
 }
 
-void App::mouseCallback(GLFWwindow* window, double posx, double posy) {
+void App::cursorPosCallback(GLFWwindow* window, double posx, double posy) {
     if (FIRST_MOUSE) {
-        App::CURSOR_POS_X = posx;
-        App::CURSOR_POS_Y = posy;
+        App::CURSOR_POS[0] = posx;
+        App::CURSOR_POS[1] = posy;
         App::FIRST_MOUSE = false;
     }
-    float posx_offset = posx - App::CURSOR_POS_X;
-    float posy_offset = App::CURSOR_POS_Y - posy;
-    App::CURSOR_POS_X = posx;
-    App::CURSOR_POS_Y = posy;
+    if (LBUTTON_DOWN) {
+        float radius = sqrt(pow((CURSOR_POS[0] - LBUTTON_DOWN_CURSOR_POS[0]), 2.0)
+                        + pow((CURSOR_POS[0] - LBUTTON_DOWN_CURSOR_POS[0]), 2.0));
+        //App::gamestate->cuestick->animate(radius);
+    }
+    float posx_offset = posx - App::CURSOR_POS[0];
+    float posy_offset = App::CURSOR_POS[1] - posy;
+    App::CURSOR_POS[0] = posx;
+    App::CURSOR_POS[1] = posy;
     App::CAMERA.processMouseMovement(posx_offset, posy_offset);
+}
+
+void App::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        if(action == GLFW_PRESS) {
+            App::LBUTTON_DOWN = true;
+            App::LBUTTON_DOWN_CURSOR_POS[0] = App::CURSOR_POS[0];
+            App::LBUTTON_DOWN_CURSOR_POS[1] = App::CURSOR_POS[1];
+        } else if(action == GLFW_RELEASE) {
+            if (App::LBUTTON_DOWN) {
+                App::LBUTTON_DOWN = false;
+                App::LBUTTON_DOWN_CURSOR_POS[0] = -1.0f;
+                App::LBUTTON_DOWN_CURSOR_POS[1] = -1.0f;
+                //App::gamestate->hit();
+            }
+        }
+    }
+    /*
+    if(App::LBUTTON_DOWN) {
+        // do your drag here
+    }
+    */
 }
 
 void App::scrollCallback(GLFWwindow* window, double offsetx, double offsety) {
     App::CAMERA.processMouseScroll(offsety);
-}
-
-
-// utility function for loading a 2D texture from file
-// ---------------------------------------------------
-unsigned int App::loadTexture(char const * path, unsigned int tex_unit) {
-    glActiveTexture(GL_TEXTURE0 + tex_unit);
-    unsigned int textureID;
-    glGenTextures(1, &textureID);
-    
-    int width, height, nr_components;
-    unsigned char *data = stbi_load(path, &width, &height, &nr_components, 0);
-    if (data) {
-        GLenum format;
-        if (nr_components == 1)
-            format = GL_LUMINANCE;
-        else if (nr_components == 2)
-            format = GL_LUMINANCE_ALPHA;
-        else if (nr_components == 3)
-            format = GL_RGB;
-        else if (nr_components == 4)
-            format = GL_RGBA;
-        
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
-        stbi_image_free(data);
-    } else {
-        std::cerr << "Texture failed to load at path: " << path << std::endl;
-        stbi_image_free(data);
-    }
-    printf("number of components : %d\n", nr_components);       //Debug
-    return textureID;
 }

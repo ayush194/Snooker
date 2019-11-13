@@ -160,14 +160,18 @@ void GameState::simulate() {
     if (this->simulation_complete) std::cout << "Simulation Complete" << std::endl;
 }
 
+void GameState::hit() {
+    
+}
+
 void GameState::setCueStick() {
     //the cuestick should always lie along the line joining the camera with the cue ball
     glm::mat4 rot_init = glm::rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::vec3 cue_position = glm::vec3(this->balls[0]->model[3]);
     //get the projection of the camera->cue vector on the surface of the pooltable
-    
+    glm::vec3 boundary_position = App::CAMERA.getParametricBoundary(App::CAMERA.param_u);
     //glm::ved3 camers_offset_position = glm::vec3();
-    glm::vec3 cuestick_dirn(glm::normalize(cue_position - App::CAMERA.position));
+    glm::vec3 cuestick_dirn(glm::normalize(cue_position - boundary_position));
     //currently, the snooker points in the positive z direction
     //create a transform such that the cuestick lies along the cuestick_dirn
     glm::vec3 rand_dirn = glm::normalize(glm::vec3(cuestick_dirn[0], cuestick_dirn[1], cuestick_dirn[2] + 0.5));
@@ -179,7 +183,7 @@ void GameState::setCueStick() {
                         cuestick_dirn[0], cuestick_dirn[1], cuestick_dirn[2], 0,
                         0, 0, 0, 1};
     glm::mat4 cuestick_transform =  glm::make_mat4(tmp);
-    glm::mat4 translation_transform = glm::translate(App::CAMERA.position + cuestick_dirn * 2.0f);
+    glm::mat4 translation_transform = glm::translate(boundary_position + this->cuestick->animate_factor * (cue_position - boundary_position));
     this->cuestick->model = translation_transform * cuestick_transform * rot_init;
 }
 

@@ -7,7 +7,12 @@
 //Flag -I/usr/local/include required for compiling with g++
 #include "glm_includes.h"
 #include "camera.h"
+//#include "Gamestate.h"
+
+#include <cmath>
 #include <iostream>
+
+class GameState;
 
 class App {
 public:
@@ -16,11 +21,13 @@ public:
     static unsigned int SCR_HEIGHT;
     static float LAST_TIME;
     static float DELTA_TIME;
-    static float CURSOR_POS_X;
-    static float CURSOR_POS_Y;
+    static float CURSOR_POS[2];
+    static bool LBUTTON_DOWN;
+    static float LBUTTON_DOWN_CURSOR_POS[2];
     static bool FIRST_MOUSE;
     static Camera CAMERA;
     static GLFWwindow* window;
+    static GameState* gamestate;
 
     App();
     static void updateFrame();
@@ -28,7 +35,8 @@ public:
     static void clearColor();
     static glm::mat4 getViewMatrix();
     static glm::mat4 getProjectionMatrix();
-    static void mouseCallback(GLFWwindow*, double, double);
+    static void cursorPosCallback(GLFWwindow*, double, double);
+    static void mouseButtonCallback(GLFWwindow*, int, int, int);
     static void scrollCallback(GLFWwindow*, double, double);
     static void framebufferSizeCallback(GLFWwindow*, int, int);
     static void processInput();

@@ -5,7 +5,7 @@
 #include "glm_includes.h"
 #include "objloader.hpp"
 #include "shader.h"
-#include "App.h"
+#include "texture.h"
 
 #include <stdio.h>
 #include <vector>
@@ -19,16 +19,20 @@ public:
 
     glm::vec3 pos;
     glm::mat4 model;
+    float animate_factor;
     //all objects share the same common vertex data
     //and the common material data
     static std::vector<Vertex> vertices;
     static std::vector<Material*> mtls;
     //static Shader* shader;
+    //bool animate;
 
     CueStick(int);
     ~CueStick();
     glm::mat4& getModelMatrix();
     static void loadVertexData();
+    void animate(float radius);
+    void unanimate();
     void render(Shader*);
 };
 

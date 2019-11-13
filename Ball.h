@@ -5,7 +5,7 @@
 #include "opengl_includes.h"
 #include <string>
 #include "shader.h"
-#include "App.h"
+#include "texture.h"
 
 //model loading library
 #include "objloader.hpp"
