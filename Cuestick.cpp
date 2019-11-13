@@ -4,7 +4,8 @@ std::vector<Vertex> CueStick::vertices;
 std::vector<Material*> CueStick::mtls;
 
 CueStick::CueStick(int id) : id(id) {
-    //this->model = glm::rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    this->model = glm::rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    //this->model = glm::translate(glm::vec3(0.0, 0.0, 1.5));       //just for debugging
 
     glGenVertexArrays(1, &(this->vao));
     glGenBuffers(1, &(this->vbo));
@@ -39,7 +40,8 @@ void CueStick::loadVertexData() {
 }
 
 glm::mat4& CueStick::getModelMatrix() {
-    this->model = glm::translate(this->pos);
+    //this->model = glm::translate(this->pos);
+    
     return this->model;
 }
 

@@ -45,23 +45,17 @@ float GameState::walls_shape[][3] = {
 
 //Initial Position of the balls
 
-float GameState::holes[][3] = {
-                                {-3.028,  -5.473, 1.080},       //Hole 1
-                                {-3.107,  -0.010, 1.080},       //Hole 2
-                                {-3.028,  5.473,  1.080},       //Hole 3
-                                {3.054,   5.473,  1.080},       //Hole 4
-                                {3.107,   0.010,  1.080},       //Hole 5
-                                {3.054,   -5.473, 1.080},       //Hole 6
-                            };
-
-	//Radius of hole -> 0.300
-	//Right wall at x = 3.054
-	//Bottom wall at y = -5.474
-	//Top Wall at y = 5.473
-	//Left Wall at x = -3.028
-	//Surface of the table at z = 0.492
-
 GameState::GameState() : time_step(1.0/60.0) {
+    PoolTable::loadVertexData();
+    CueStick::loadVertexData();
+    Ball::loadVertexData();
+
+    this->pooltable = new PoolTable(0);
+    this->cuestick = new CueStick(0);
+    for(int i = 0; i < 16; i++) {
+		this->balls[i] = new Ball(i);
+	}
+
     //using ReactPhysics3d library
 	rp3d::Vector3 gravity(0.0, 0.0, -9.81);
 	this->world = new rp3d::DynamicsWorld(gravity);
@@ -119,16 +113,22 @@ GameState::GameState() : time_step(1.0/60.0) {
 		this->frictionsurface->addCollisionShape(this->box_shape2, rp3d::Transform::identity(), 5000.0);
 
 	//provide an impulse to the cue in the y direction
-	this->rigidbodies[0]->setLinearVelocity(rp3d::Vector3(0.0, 40.0, 0.0));		//only for debugging
+	//this->rigidbodies[0]->setLinearVelocity(rp3d::Vector3(0.0, 40.0, 0.0));		//only for debugging
 	
 	this->accumulator = 0;
     this->simulation_complete = false;
 }
 
 GameState::~GameState() {
+    //allocate all variable initialized with the new keyword
     for(int i = 0; i < 6; i++) {
 		delete this->box_shapes[i];
 	}
+    for(int i = 0; i < 16; i++) {
+		delete balls[i];
+	}
+	delete pooltable;
+	delete cuestick;
 }
 
 void GameState::simulate() {
@@ -160,7 +160,30 @@ void GameState::simulate() {
     if (this->simulation_complete) std::cout << "Simulation Complete" << std::endl;
 }
 
-void GameState::updateState(Ball** balls) {
+void GameState::setCueStick() {
+    //the cuestick should always lie along the line joining the camera with the cue ball
+    glm::mat4 rot_init = glm::rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::vec3 cue_position = glm::vec3(this->balls[0]->model[3]);
+    //get the projection of the camera->cue vector on the surface of the pooltable
+    
+    //glm::ved3 camers_offset_position = glm::vec3();
+    glm::vec3 cuestick_dirn(glm::normalize(cue_position - App::CAMERA.position));
+    //currently, the snooker points in the positive z direction
+    //create a transform such that the cuestick lies along the cuestick_dirn
+    glm::vec3 rand_dirn = glm::normalize(glm::vec3(cuestick_dirn[0], cuestick_dirn[1], cuestick_dirn[2] + 0.5));
+    glm::vec3 dirn1 = glm::normalize(glm::cross(cuestick_dirn, rand_dirn));
+    glm::vec3 dirn2 = glm::normalize(glm::cross(cuestick_dirn, dirn1));
+    //now dirn1, dirn2, cuestick_dirn is an orthogonal set of vectors
+    float tmp[16] = {   dirn1[0], dirn1[1], dirn1[2], 0,
+                        dirn2[0], dirn2[1], dirn2[2], 0,
+                        cuestick_dirn[0], cuestick_dirn[1], cuestick_dirn[2], 0,
+                        0, 0, 0, 1};
+    glm::mat4 cuestick_transform =  glm::make_mat4(tmp);
+    glm::mat4 translation_transform = glm::translate(App::CAMERA.position + cuestick_dirn * 2.0f);
+    this->cuestick->model = translation_transform * cuestick_transform * rot_init;
+}
+
+void GameState::updateState() {
     rp3d::decimal factor = accumulator/time_step;
     for(int i = 0; i < 16; i++) {
         rp3d::Transform curr_transform = rigidbodies[i]->getTransform();
@@ -168,7 +191,7 @@ void GameState::updateState(Ball** balls) {
             rp3d::Transform::interpolateTransforms(this->prev_transforms[i], curr_transform, factor);
         float matrix[16];
         interpolated_transform.getOpenGLMatrix(matrix);
-        balls[i]->model = glm::make_mat4(matrix);
+        this->balls[i]->model = glm::make_mat4(matrix);
         this->prev_transforms[i] = curr_transform;
     }
 }

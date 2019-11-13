@@ -9,9 +9,6 @@
 #include "objloader.hpp"
 #include "shader.h"
 
-#include "Pooltable.h"
-#include "Cuestick.h"
-#include "Ball.h"
 #include "Gamestate.h"
 #include "glm_includes.h"
 
@@ -20,20 +17,7 @@
 
 int main() {
 	App();
-	PoolTable::loadVertexData();
-	PoolTable* pooltable = new PoolTable(0);
-	CueStick::loadVertexData();
-	CueStick* cuestick = new CueStick(0);
-	Ball::loadVertexData();
-	Ball* balls[16];
 	GameState* gamestate = new GameState();
-
-	cuestick->pos = glm::vec3(0.0, 0.0, 1.5);
-	
-	for(int i = 0; i < 16; i++) {
-		balls[i] = new Ball(i);
-		//balls[i]->pos = glm::vec3(balls_pos_i[i][0], balls_pos_i[i][1], balls_pos_i[i][2]);
-	}
 	
 	//building shaders
 	Shader pooltable_diffuse_shader("shaders/pooltable_diffuse.vs", "shaders/pooltable_diffuse.fs");
@@ -42,6 +26,8 @@ int main() {
 
 	App::updateFrame();
 	int iters = 0;
+
+	//gamestate->cuestick->model = glm::translate(glm::vec3(0.1, 0.5, 0.1)) * gamestate->cuestick->model;
 
 	while (!glfwWindowShouldClose(App::window)) {
 		//process input
@@ -68,22 +54,26 @@ int main() {
 		axes_shader.setMat4("projection", projection);
 		//draw axes
 		App::drawAxes();
+		gamestate->pooltable->drawBoundary();
 		
 		pooltable_diffuse_shader.use();
-		pooltable_diffuse_shader.setMat4("model", pooltable->getModelMatrix());
+		pooltable_diffuse_shader.setMat4("model", gamestate->pooltable->getModelMatrix());
 		pooltable_diffuse_shader.setMat4("view", view);
 		pooltable_diffuse_shader.setMat4("projection", projection);
 		pooltable_diffuse_shader.setVec3("glightpos", glm::vec3(3,4,5));
-		pooltable->render(&pooltable_diffuse_shader);
+		gamestate->pooltable->render(&pooltable_diffuse_shader);
 
-		pooltable_diffuse_shader.setMat4("model", cuestick->getModelMatrix());
-		cuestick->render(&pooltable_diffuse_shader);
+		if (gamestate->simulation_complete) {
+			gamestate->setCueStick();
+		}
+		pooltable_diffuse_shader.setMat4("model", gamestate->cuestick->getModelMatrix());
+		gamestate->cuestick->render(&pooltable_diffuse_shader);
 
 		
 		//after the simulation has completed for this frame, update the positions
 		//and transformations of the balls
 		gamestate->simulate();
-		gamestate->updateState(balls);
+		gamestate->updateState();
 		
 
 		ball_diffuse_shader.use();
@@ -91,8 +81,8 @@ int main() {
 		ball_diffuse_shader.setMat4("projection", projection);
 		ball_diffuse_shader.setVec3("glightpos", glm::vec3(3,4,5));
 		for(int i = 0; i < 16; i++) {
-			ball_diffuse_shader.setMat4("model", balls[i]->getModelMatrix());
-			balls[i]->render(&ball_diffuse_shader);
+			ball_diffuse_shader.setMat4("model", gamestate->balls[i]->getModelMatrix());
+			gamestate->balls[i]->render(&ball_diffuse_shader);
 		}
 
 		//accesorial actions
@@ -101,11 +91,6 @@ int main() {
 	glfwTerminate();
 	//deallocate everything that was dynamically created (using the new keyword);
 	delete gamestate;
-	for(int i = 0; i < 16; i++) {
-		delete balls[i];
-	}
-	delete pooltable;
-	delete cuestick;
 
 	return 0;
 }

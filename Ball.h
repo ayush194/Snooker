@@ -39,6 +39,7 @@ public:
     ~Ball();
     static void loadVertexData();
     glm::mat4& getModelMatrix();
+    glm::vec3 getPosition();
     void render(Shader*);
 };
 

@@ -8,6 +8,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Pooltable.h"
+#include <cmath>
 
 #include <vector>
 
@@ -19,10 +21,20 @@ enum CameraMovement {
     RIGHT
 };
 
+#define _OFF_X  2.5f
+#define _OFF_Y  2.5f
+#define _OFF_Z  4.0f
+#define _B_(i, j) PoolTable::holes[(i)][(j)]
 // Default camera values
-const float _speed       =  2.5f;
+const float _speed       =  0.5f;
 const float _sensitivity =  0.1f;
 const float _zoom        =  45.0f;
+const glm::vec3 _path[]  =  {   
+                                {-3.028-_OFF_X,  -5.473-_OFF_Y,   1.080+_OFF_Z},
+                                {-3.028-_OFF_X,   5.473+_OFF_Y,   1.080+_OFF_Z},
+                                { 3.054+_OFF_X,   5.473+_OFF_Y,   1.080+_OFF_Z},
+                                { 3.054+_OFF_X,  -5.473-_OFF_Y,   1.080+_OFF_Z}
+                            };
 
 //const float _speed = 1.0;
 //const float _sensitivity = 0.025f;
@@ -50,14 +62,16 @@ public:
     float movement_speed;
     float mouse_sensitivity;
     float zoom;
+    float param_u;
     
     // Constructor with vectors
     Camera(glm::vec3 pos = glm::vec3(0.0f, -5.577f, 1.026f),  
         glm::vec3 fr = glm::vec3(0.0f, 1.0f, 0.0f), 
         glm::vec3 u = glm::vec3(0.0f, 0.0f, 1.0f)) : 
-        movement_speed(_speed), mouse_sensitivity(_sensitivity), zoom(_zoom)
+        movement_speed(_speed), mouse_sensitivity(_sensitivity), zoom(_zoom), param_u(0)
     {
-        position = pos;
+        //position = pos;
+        updateCameraPosition();
         front = glm::normalize(fr);
         worldup = u;
         //calculate yaw and pitch values based on the front vector the user specified
@@ -77,21 +91,53 @@ public:
         */
         return glm::lookAt(position, position + front, up);
     }
+
+    void updateCameraPosition() {
+        //updates the position based on the parameter param_u
+        // float path_perimeter = (_path[1][1] - _path[0][1] 
+        //                         + _path[2][0] - _path[1][0] 
+        //                         + _path[2][1] - _path[3][1] 
+        //                         + _path[3][0] - _path[0][0]);
+        // float u[5] = {  0,
+        //                 (_path[1][1] - _path[0][1]) / path_perimeter,
+        //                 (_path[1][1] - _path[0][1] + _path[2][0] - _path[1][0]) / path_perimeter,
+        //                 (_path[1][1] - _path[0][1] + _path[2][0] - _path[1][0] + _path[2][1] - _path[3][1]) / path_perimeter
+        //                 1
+        //              }
+        if (0 <= param_u && param_u < 1) {
+            position = param_u * _path[1] + (1.0f-param_u) * _path[0];
+        } else if (1 <= param_u && param_u < 2) {
+            position = (param_u-1.0f) * _path[2] + (2.0f-param_u) * _path[1];
+        } else if (2 <= param_u && param_u < 3) {
+            position = (param_u-2.0f) * _path[3] + (3.0f-param_u) * _path[2];
+        } else {
+            position = (param_u-3.0f) * _path[0] + (4.0f-param_u) * _path[3];
+        }
+    }
     
     // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void processKeyboard(CameraMovement direction, float delta_time)
     {
+        //camera must always look towards the cueball
         float velocity = movement_speed * delta_time;
-        if (direction == FORWARD)
-            position += front * velocity;
-        if (direction == BACKWARD)
-            position -= front * velocity;
-        if (direction == LEFT)
-            position -= right * velocity;
-        if (direction == RIGHT)
-            position += right * velocity;
+        if (direction == FORWARD) {
+            //position += front * velocity;
+        }
+        if (direction == BACKWARD) {
+            //position -= front * velocity;
+        }
+        if (direction == LEFT) {
+            //position -= right * velocity;
+            param_u += velocity;
+            param_u = (param_u - floor(param_u)) + int(floor(param_u)) % 4;
+        }
+        if (direction == RIGHT) {
+            //position += right * velocity;
+            param_u -= velocity;
+            param_u = (param_u - floor(param_u)) + (int(floor(param_u)) % 4 + 4) % 4;
+        }    
         // make sure the user stays at the ground level (xz plane)
-        //position.y = 0.0f;
+        updateCameraPosition();
     }
     
     // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.

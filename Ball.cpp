@@ -46,6 +46,11 @@ void Ball::loadVertexData() {
     parseMTL("models/ball.mtl", tmp2, Ball::mtls);
 }
 
+glm::vec3 Ball::getPosition() {
+    //return the last column of the model matrix
+    return glm::vec3(this->model[3]);
+}
+
 glm::mat4& Ball::getModelMatrix() {
     //note that glm postmultiplies the matrix which means
     //this->model = glm::translate(this->model, glm::vec3(a, b, c))

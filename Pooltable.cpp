@@ -3,6 +3,22 @@
 std::vector<Vertex> PoolTable::vertices;
 std::vector<Material*> PoolTable::mtls;
 
+float PoolTable::holes[][3] = {
+                                {-3.028,  -5.473, 1.080},       //Hole 0
+                                {-3.107,  -0.010, 1.080},       //Hole 1
+                                {-3.028,  5.473,  1.080},       //Hole 2
+                                {3.054,   5.473,  1.080},       //Hole 3
+                                {3.107,   0.010,  1.080},       //Hole 4
+                                {3.054,   -5.473, 1.080},       //Hole 5
+                            };
+
+	//Radius of hole -> 0.300
+	//Right wall at x = 3.054
+	//Bottom wall at y = -5.474
+	//Top Wall at y = 5.473
+	//Left Wall at x = -3.028
+	//Surface of the table at z = 0.492
+
 PoolTable::PoolTable(int id) : id(id) {
     this->model = glm::rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
@@ -46,6 +62,32 @@ void PoolTable::loadVertexData() {
 
 glm::mat4& PoolTable::getModelMatrix() {
     return this->model;
+}
+
+void PoolTable::drawBoundary() {
+    float boundary[] = {    holes[0][0], holes[0][1], 1.2, 1.0, 1.0, 0.0,   holes[2][0], holes[2][1], 1.2, 1.0, 1.0, 0.0, 
+                            holes[2][0], holes[2][1], 1.2, 1.0, 1.0, 0.0,   holes[3][0], holes[3][1], 1.2, 1.0, 1.0, 0.0, 
+                            holes[3][0], holes[3][1], 1.2, 1.0, 1.0, 0.0,   holes[5][0], holes[5][1], 1.2, 1.0, 1.0, 0.0,
+                            holes[5][0], holes[5][1], 1.2, 1.0, 1.0, 0.0,   holes[0][0], holes[0][1], 1.2, 1.0, 1.0, 0.0};
+    unsigned int vbo_boundary, vao_boundary;
+    glGenVertexArrays(1, &vao_boundary);
+    glGenBuffers(1, &vbo_boundary);
+    glBindVertexArray(vao_boundary);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_boundary);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(boundary), boundary, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+    //glLineWidth(3.0f);          //change line width
+    glDrawArrays(GL_LINES, 0, 8);
+    //glLineWidth(1.0f);          //reset line width
+
+    //unbind vertex arrays and buffers
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glDeleteVertexArrays(1, &vao_boundary);
+    glDeleteBuffers(1, &vbo_boundary);
 }
 
 void PoolTable::render(Shader* shader) {

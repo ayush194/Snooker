@@ -3,7 +3,9 @@
 
 #include <reactphysics3d.h>
 #include "App.h"
+#include "Pooltable.h"
 #include "Ball.h"
+#include "Cuestick.h"
 #include "glm_includes.h"
 
 #include <iostream>
@@ -31,7 +33,6 @@ public:
     static float balls_pos_i[][3];
     static float walls_pos[][3];
     static float walls_shape[][3];
-    static float holes[][3];
 
     //constant physics time step
     const float time_step = 1.0/60.0;
@@ -55,13 +56,19 @@ public:
 
     rp3d::Transform prev_transforms[16];
 
+    	
+	PoolTable* pooltable;
+	CueStick* cuestick;
+	Ball* balls[16];
+
     bool simulation_complete;
     float accumulator;
 
     GameState();
     ~GameState();
     void simulate();
-    void updateState(Ball**);
+    void setCueStick();
+    void updateState();
 };
 
 #endif

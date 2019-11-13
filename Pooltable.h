@@ -23,12 +23,14 @@ public:
     //and the common material data
     static std::vector<Vertex> vertices;
     static std::vector<Material*> mtls;
+    static float holes[][3];
     //static Shader* shader;
 
     PoolTable(int);
     ~PoolTable();
     glm::mat4& getModelMatrix();
     static void loadVertexData();
+    void drawBoundary();
     void render(Shader*);
 };
 
