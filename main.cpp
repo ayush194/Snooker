@@ -12,19 +12,24 @@
 #include "Gamestate.h"
 #include "glm_includes.h"
 #include "stb_image/stb_image.h"
+#include "Environment.h"
 
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 int main() {
 	App();
 	GameState* gamestate = new GameState();
+	Environment::loadVertexData();
+	Environment* env = new Environment();
 	//App::gamestate = gamestate;
 	
 	//building shaders
 	Shader pooltable_diffuse_shader("shaders/pooltable_diffuse.vs", "shaders/pooltable_diffuse.fs");
 	Shader ball_diffuse_shader("shaders/ball_diffuse.vs", "shaders/ball_diffuse.fs");
 	Shader axes_shader("shaders/axes.vs", "shaders/axes.fs");
+	Shader env_shader("shaders/cubemap.vs", "shaders/cubemap.fs");
 
 	App::updateFrame();
 	int iters = 0;
@@ -34,7 +39,9 @@ int main() {
 	while (!glfwWindowShouldClose(App::window)) {
 		//process input
 		App::updateFrame();
+		//if (gamestate->simulation_complete) {
 		App::processInput();
+		//}
 		App::clearColor();
 
 		iters++;
@@ -44,13 +51,21 @@ int main() {
 			continue;
 		}
 
-		std::cout << "entered main loop" << std::endl;
-		std::cout << "Delta time : " << App::DELTA_TIME << std::endl;
-		std::cout << "theta: " << App::CAMERA.theta << std::endl;
+		//std::cout << "entered main loop" << std::endl;
+		//std::cout << "Delta time : " << App::DELTA_TIME << std::endl;
+		//std::cout << "theta: " << App::CAMERA.theta << std::endl;
 
 		//create transform matrices
 		glm::mat4 view = App::getViewMatrix();
 		glm::mat4 projection = App::getProjectionMatrix();
+		//remove translation to create a fake_view matrix
+		glm::mat4 fake_view = glm::mat4(glm::mat3(view));
+
+		env_shader.use();
+		env_shader.setMat4("model", env->getModelMatrix());
+		env_shader.setMat4("view", fake_view);
+		env_shader.setMat4("projection", projection);
+		env->render(&env_shader);
 
 		axes_shader.use();
 		axes_shader.setMat4("view", view);
@@ -67,7 +82,19 @@ int main() {
 		gamestate->pooltable->render(&pooltable_diffuse_shader);
 
 		if (gamestate->simulation_complete) {
-			gamestate->setCueStick();
+			float radius = App::getMouseDrag();
+			if (radius != -1) gamestate->cuestick->animate(radius);
+			else gamestate->cuestick->unanimate();
+			glm::vec3 force_dirn = gamestate->setCueStick();
+			glm::vec3 force = 20.0f * gamestate->cuestick->animate_factor * force_dirn;
+			if (App::HIT) {
+				gamestate->simulation_complete = false;
+				assert(gamestate->rigidbodies[0]);
+				gamestate->rigidbodies[0]->setLinearVelocity(rp3d::Vector3(force[0], force[1], force[2]));
+				gamestate->rigidbodies[0]->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 10.4));
+				App::HIT = false;
+				//Apply force to the cue
+			}
 		}
 		pooltable_diffuse_shader.setMat4("model", gamestate->cuestick->getModelMatrix());
 		gamestate->cuestick->render(&pooltable_diffuse_shader);
@@ -76,7 +103,13 @@ int main() {
 		//after the simulation has completed for this frame, update the positions
 		//and transformations of the balls
 		gamestate->simulate();
-		gamestate->updateState();
+		if (!gamestate->simulation_complete) {
+			gamestate->updateState();
+		}
+
+		if (gamestate->simulation_complete && iters > 2) {
+			gamestate->performBallCheck();
+		}
 		
 
 		ball_diffuse_shader.use();
@@ -85,7 +118,9 @@ int main() {
 		ball_diffuse_shader.setVec3("glightpos", glm::vec3(3,4,5));
 		for(int i = 0; i < 16; i++) {
 			ball_diffuse_shader.setMat4("model", gamestate->balls[i]->getModelMatrix());
-			gamestate->balls[i]->render(&ball_diffuse_shader);
+			if (!gamestate->balls[i]->scored) {
+				gamestate->balls[i]->render(&ball_diffuse_shader);
+			}
 		}
 
 		//accesorial actions

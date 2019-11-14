@@ -10,22 +10,6 @@
 
 #include <iostream>
 
-// #define PLAYER1 0
-// #define PLAYER2 0
-#define HIT_FORCE_INCREMENT 3.0 //TODO: increase this if not enough increment in force
-#define CUE_STICK_MOVE_INCREMENT 0.1
-
-typedef enum State {
-    SIMULATION1, //simulation going after player1 turn, do nothing just update frame
-    SIMULATION2, //simulation going after player2 turn, do nothing just update frame
-    FAULT1, //fault by player1, this occurs before player2 turn, who moves the ball wherever he wants
-    FAULT2, //fault by player1, this occurs before player2 turn, who moves the ball wherever he wants
-    TURN1_MOVE, //player1 turn to move the cue_stick
-    TURN2_MOVE, //player2 turn to move the cue_stick
-    TURN1_HIT, //player1 turn to hit the ball. Apply force in this state
-    TURN2_HIT //player2 turn to hit the ball. Apply force in this state
-} State;
-
 class GameState {
 public:
     rp3d::DynamicsWorld* world;
@@ -33,6 +17,8 @@ public:
     static float balls_pos_i[][3];
     static float walls_pos[][3];
     static float walls_shape[][3];
+    static float outer_walls_pos[][3];
+    static float outer_walls_shape[][3];
 
     //constant physics time step
     const float time_step = 1.0/60.0;
@@ -45,6 +31,10 @@ public:
     rp3d::RigidBody* rigidwalls[6];
 	rp3d::BoxShape* box_shapes[6];
 	rp3d::ProxyShape* box_proxyshapes[6];
+
+    rp3d::RigidBody* rigidwalls_outer[4];
+	rp3d::BoxShape* box_shapes_outer[4];
+	rp3d::ProxyShape* box_proxyshapes_outer[4];
 
     rp3d::RigidBody* surface;
     rp3d::BoxShape* box_shape;
@@ -64,12 +54,19 @@ public:
     bool simulation_complete;
     float accumulator;
 
+    uint turn;
+    bool turn_continued;
+    bool fault_occurred;
+    int score[2];
+    int balls_on_board = 15;
+
     GameState();
     ~GameState();
     void hit();
     void simulate();
-    void setCueStick();
+    glm::vec3 setCueStick();
     void updateState();
+    void performBallCheck();
 };
 
 #endif

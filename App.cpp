@@ -1,14 +1,16 @@
 #include "App.h"
 
-unsigned int App::SCR_WIDTH = 800;
-unsigned int App::SCR_HEIGHT = 600;
+unsigned int App::SCR_WIDTH = 1280;
+unsigned int App::SCR_HEIGHT = 800;
 float App::LAST_TIME = 0.0;
 float App::DELTA_TIME = 0.0;
 float App::CURSOR_POS[2] = {static_cast<float>(App::SCR_WIDTH) / 2, 
                             static_cast<float>(App::SCR_HEIGHT) / 2};
+bool App::F_DOWN = false;
 bool App::LBUTTON_DOWN = false;
 float App::LBUTTON_DOWN_CURSOR_POS[2] = {-1.0f, -1.0f};
 bool App::FIRST_MOUSE = true;
+bool App::HIT = false;
 
 // Open a window and create its OpenGL context
 GLFWwindow* App::window;
@@ -64,11 +66,18 @@ App::App() {
     
     //Enable depth test
     glEnable(GL_DEPTH_TEST);
+
+    //if you enable GL_CULL_FACE, then the cubemaps will not be rendered
+    //this is because at any time, any face of the cube will not
+    //lie inside the view frustum and so it will be culled
+    glDisable(GL_CULL_FACE);
+
+
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
     // Cull triangles which normal is not towards the camera
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 }
 
 void App::updateFrame() {
@@ -85,6 +94,14 @@ void App::endFrame() {
 void App::clearColor() {
     glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+float App::getMouseDrag() {
+    if (LBUTTON_DOWN) {
+        return sqrt(pow((CURSOR_POS[0] - LBUTTON_DOWN_CURSOR_POS[0]), 2.0)
+                + pow((CURSOR_POS[0] - LBUTTON_DOWN_CURSOR_POS[0]), 2.0));
+    }
+    return -1;
 }
 
 glm::mat4 App::getViewMatrix() {
@@ -123,7 +140,8 @@ void App::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 }
 
 void App::processInput() {
-    if (glfwGetKey(App::window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    
+    if (glfwGetKey(App::window, GLFW_KEY_Q) == GLFW_PRESS) {
         glfwSetWindowShouldClose(App::window, GL_TRUE);
     }
     if (glfwGetKey(App::window, GLFW_KEY_W) == GLFW_PRESS) {
@@ -138,6 +156,12 @@ void App::processInput() {
     if (glfwGetKey(App::window, GLFW_KEY_D) == GLFW_PRESS) {
         App::CAMERA.processKeyboard(RIGHT, DELTA_TIME);
     }
+    if (glfwGetKey(App::window, GLFW_KEY_F) == GLFW_PRESS) {
+        App::F_DOWN = true;
+    } else if (F_DOWN) {
+        App::F_DOWN = false;
+        App::CAMERA.toggleLock();
+    }
     if (glfwGetKey(App::window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         App::LBUTTON_DOWN = false;
         App::LBUTTON_DOWN_CURSOR_POS[0] = -1.0f;
@@ -151,11 +175,6 @@ void App::cursorPosCallback(GLFWwindow* window, double posx, double posy) {
         App::CURSOR_POS[0] = posx;
         App::CURSOR_POS[1] = posy;
         App::FIRST_MOUSE = false;
-    }
-    if (LBUTTON_DOWN) {
-        float radius = sqrt(pow((CURSOR_POS[0] - LBUTTON_DOWN_CURSOR_POS[0]), 2.0)
-                        + pow((CURSOR_POS[0] - LBUTTON_DOWN_CURSOR_POS[0]), 2.0));
-        //App::gamestate->cuestick->animate(radius);
     }
     float posx_offset = posx - App::CURSOR_POS[0];
     float posy_offset = App::CURSOR_POS[1] - posy;
@@ -176,6 +195,7 @@ void App::mouseButtonCallback(GLFWwindow* window, int button, int action, int mo
                 App::LBUTTON_DOWN_CURSOR_POS[0] = -1.0f;
                 App::LBUTTON_DOWN_CURSOR_POS[1] = -1.0f;
                 //App::gamestate->hit();
+                App::HIT = true;
             }
         }
     }

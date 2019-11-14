@@ -12,8 +12,6 @@
 #include <cmath>
 #include <iostream>
 
-class GameState;
-
 class App {
 public:
     //Add an extra property APP_NAME which stores the name of the app
@@ -22,12 +20,14 @@ public:
     static float LAST_TIME;
     static float DELTA_TIME;
     static float CURSOR_POS[2];
+    static bool F_DOWN;
     static bool LBUTTON_DOWN;
     static float LBUTTON_DOWN_CURSOR_POS[2];
     static bool FIRST_MOUSE;
     static Camera CAMERA;
     static GLFWwindow* window;
-    static GameState* gamestate;
+    static bool HIT;
+    //static GameState* gamestate;
 
     App();
     static void updateFrame();
@@ -40,6 +40,7 @@ public:
     static void scrollCallback(GLFWwindow*, double, double);
     static void framebufferSizeCallback(GLFWwindow*, int, int);
     static void processInput();
+    static float getMouseDrag();
     static unsigned int loadTexture(char const*, unsigned int);
     static void drawAxes();
 };

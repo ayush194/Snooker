@@ -8,6 +8,7 @@
 #include "texture.h"
 
 #include <stdio.h>
+#include <iostream>
 #include <vector>
 
 class CueStick {

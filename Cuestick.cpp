@@ -39,7 +39,8 @@ CueStick::~CueStick() {
 
 void CueStick::animate(float radius) {
     //this->animate = true;
-    this->animate_factor = 0.7 * exp(-radius) + 0.2;
+    //std::cout << radius << std::endl;
+    this->animate_factor = 0.7 * exp(-radius / 40) + 0.2;
 }
 
 void CueStick::unanimate() {

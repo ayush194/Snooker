@@ -24,6 +24,7 @@ public:
     //the id for cue ball is -1 which means it uses no material
     unsigned int texture_id;
     int id;
+    bool scored;
     //can get the model matrix using position and rotation attributes
     glm::vec3 pos;
     glm::mat4 model;
@@ -32,7 +33,8 @@ public:
     static std::vector<Vertex> vertices;
     static std::vector<Material*> mtls;
     static float radius;
-    static float mass;
+    static float mass_cue;
+    static float mass_ball;
     //static Shader* shader;
 
     Ball(int);

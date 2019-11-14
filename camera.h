@@ -66,12 +66,14 @@ public:
     float zoom;
     float param_u;
     float theta;
+    bool locked;
     
     // Constructor with vectors
     Camera(glm::vec3 pos = glm::vec3(0.0f, -5.577f, 1.026f),  
         glm::vec3 fr = glm::vec3(0.0f, 1.0f, 0.0f), 
         glm::vec3 u = glm::vec3(0.0f, 0.0f, 1.0f)) : 
-        movement_speed(_speed), mouse_sensitivity(_sensitivity), zoom(_zoom), param_u(0), theta(M_PI / 4)
+        movement_speed(_speed), mouse_sensitivity(_sensitivity), zoom(_zoom), param_u(0), theta(M_PI / 4),
+        locked(false)
     {
         //position = pos;
         updateCameraPosition();
@@ -93,6 +95,11 @@ public:
         printf("up : %f %f %f\n", up.x, up.y, up.z);
         */
         return glm::lookAt(position, position + front, up);
+    }
+
+    void toggleLock() {
+        locked = !locked;
+        std::cout << "camera lock: " << int(locked) << std::endl;
     }
 
     glm::vec3 getParametricBoundary(float u) {
@@ -160,6 +167,7 @@ public:
     // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void processKeyboard(CameraMovement direction, float delta_time)
     {
+        if (locked) return;
         //camera must always look towards the cueball
         float velocity = movement_speed * delta_time;
         if (direction == FORWARD) {
@@ -190,7 +198,7 @@ public:
                 param_u -= 2 * velocity;
             } else if ((2 <= param_u && param_u < 3) || (6 <= param_u && param_u < 7)) {
                 //inside the shorter side of the rectangle
-                param_u -= 1.5 * velocity;
+                param_u -= 1.2 * velocity;
             } else {
                 param_u -= velocity;
             }
@@ -203,6 +211,7 @@ public:
     // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
     void processMouseMovement(float xoffset, float yoffset, GLboolean constrainpitch = true)
     {
+        if (locked) return;
         xoffset *= mouse_sensitivity;
         yoffset *= mouse_sensitivity;
         
@@ -226,6 +235,7 @@ public:
     // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void processMouseScroll(float yoffset)
     {
+        if (locked) return;
         if (zoom >= 1.0f && zoom <= 45.0f)
             zoom -= yoffset;
         if (zoom <= 1.0f)

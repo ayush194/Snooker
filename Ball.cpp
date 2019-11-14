@@ -5,7 +5,8 @@
 std::vector<Vertex> Ball::vertices;
 std::vector<Material*> Ball::mtls;
 float Ball::radius = 0.132;
-float Ball::mass = 0.2;
+float Ball::mass_cue = 0.170;
+float Ball::mass_ball = 0.156; 
 //Shader* Ball::shader = new Shader("shaders/diffuse_ball.vs", "shaders/diffuse_ball.fs");
 
 Ball::Ball(int id) : id(id) {
@@ -28,6 +29,7 @@ Ball::Ball(int id) : id(id) {
     glEnableVertexAttribArray(3);
     glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void*)(2*sizeof(glm::vec3) + sizeof(glm::vec2)));
 
+    this->scored = false;
     this->model = glm::mat4(1.0f);
     this->texture_id = loadTexture(Ball::mtls[this->id]->map_kd, id);
     printf("Ball id: %d, texture_id: %d\n", this->id, this->texture_id);
