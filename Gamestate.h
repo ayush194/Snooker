@@ -64,9 +64,10 @@ public:
     ~GameState();
     void hit();
     void simulate();
-    glm::vec3 setCueStick();
+    void setCueStick();
     void updateState();
     void performBallCheck();
+    void renderAim();
 };
 
 #endif

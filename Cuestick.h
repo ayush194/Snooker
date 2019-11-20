@@ -19,6 +19,7 @@ public:
     int id;
 
     glm::vec3 pos;
+    glm::vec3 aim;
     glm::mat4 model;
     float animate_factor;
     //all objects share the same common vertex data

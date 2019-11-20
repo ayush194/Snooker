@@ -26,22 +26,32 @@ float GameState::balls_pos_i[][3] = {
 
 	//Create 6 more static rigid bodies for the 6 pieces of walls
 float GameState::walls_pos[][3] = {
-                                {-3.107, -2.732,  1.026},
-                                {-3.107,  2.732,  1.026},
+                                {-3.168, -2.732,  1.026},
+                                {-3.168,  2.732,  1.026},
                                 { 0.020,  5.562,  1.026},
-                                { 3.148,  2.732,  1.026},
-                                { 3.128, -2.732,  1.026},
+                                { 3.219,  2.732,  1.026},
+                                { 3.219, -2.732,  1.026},
                                 { 0.020, -5.572,  1.026}
                             };
 
+                                // {-3.107, -2.732,  1.026},
+                                // {-3.107,  2.732,  1.026},
+                                // { 3.148,  2.732,  1.026},
+                                // { 3.128, -2.732,  1.026},
+
 float GameState::walls_shape[][3] = {
-                                { 0.100,  2.450,  2.000},
-                                { 0.100,  2.450,  2.000},
+                                { 0.194,  2.400,  2.000},
+                                { 0.194,  2.400,  2.000},
                                 { 2.728,  0.080,  2.000},
-                                { 0.100,  2.450,  2.000},
-                                { 0.100,  2.450,  2.000},
+                                { 0.194,  2.400,  2.000},
+                                { 0.194,  2.400,  2.000},
                                 { 2.728,  0.080,  2.000}
                             };
+
+                                // { 0.100,  2.450,  2.000},
+                                // { 0.100,  2.450,  2.000},
+                                // { 0.100,  2.450,  2.000},
+                                // { 0.100,  2.450,  2.000},
 
 float GameState::outer_walls_pos[][3] = {
                                 {-3.502,  0.000,  0.000},
@@ -50,9 +60,9 @@ float GameState::outer_walls_pos[][3] = {
                                 { 0.000, -5.809,  0.000},
                             };
 float GameState::outer_walls_shape[][3] = {
-                                { 0.100,  7.000,  2.000},
+                                { 0.180,  7.000,  2.000},
                                 { 5.000,  0.100,  2.000},
-                                { 0.100,  7.000,  2.000},
+                                { 0.180,  7.000,  2.000},
                                 { 5.000,  0.100,  2.000},
                             };
 //0.126 to match the height of the actual wall
@@ -90,9 +100,10 @@ GameState::GameState() : time_step(1.0/60.0) {
 	for(int i = 0; i < 16; i++) {
 		transform.setPosition(rp3d::Vector3(GameState::balls_pos_i[i][0], GameState::balls_pos_i[i][1], GameState::balls_pos_i[i][2]));
 		this->rigidbodies[i] = this->world->createRigidBody(transform);
-		this->rigidbodies[i]->getMaterial().setBounciness(0.2);
-		this->rigidbodies[i]->getMaterial().setFrictionCoefficient(rp3d::decimal(0.06));
-		this->rigidbodies[i]->getMaterial().setRollingResistance(rp3d::decimal(0.1));
+		this->rigidbodies[i]->getMaterial().setBounciness(0.40);
+		this->rigidbodies[i]->getMaterial().setFrictionCoefficient(rp3d::decimal(0.2));
+		this->rigidbodies[i]->getMaterial().setRollingResistance(rp3d::decimal(0.008));
+        this->rigidbodies[i]->setMass((i == 0 ? Ball::mass_cue : Ball::mass_ball));
 		//rigidbodies[i]->setLinearDamping(0.05);
 		//rigidbodies[i]->setAngularDamping(0.05);
 		this->proxyshapes[i] = 
@@ -105,8 +116,8 @@ GameState::GameState() : time_step(1.0/60.0) {
 		transform.setPosition(rp3d::Vector3(GameState::walls_pos[i][0],GameState::walls_pos[i][1], GameState::walls_pos[i][2]));
 		this->rigidwalls[i] = this->world->createRigidBody(transform);
 		this->rigidwalls[i]->setType(rp3d::BodyType::STATIC);
-		this->rigidwalls[i]->getMaterial().setBounciness(0.6);
-		this->rigidwalls[i]->getMaterial().setFrictionCoefficient(rp3d::decimal(0.2));
+		this->rigidwalls[i]->getMaterial().setBounciness(0.98);
+		this->rigidwalls[i]->getMaterial().setFrictionCoefficient(rp3d::decimal(0.14));
 		this->box_shapes[i] = new rp3d::BoxShape(rp3d::Vector3(GameState::walls_shape[i][0], GameState::walls_shape[i][1], GameState::walls_shape[i][2]));
 		this->box_proxyshapes[i] = this->rigidwalls[i]->addCollisionShape(this->box_shapes[i], rp3d::Transform::identity(), 5000.0);
 	}
@@ -116,7 +127,7 @@ GameState::GameState() : time_step(1.0/60.0) {
         transform.setPosition(rp3d::Vector3(GameState::outer_walls_pos[i][0],GameState::outer_walls_pos[i][1], GameState::outer_walls_pos[i][2]));
 		this->rigidwalls_outer[i] = this->world->createRigidBody(transform);
 		this->rigidwalls_outer[i]->setType(rp3d::BodyType::STATIC);
-		this->rigidwalls_outer[i]->getMaterial().setBounciness(0);
+		this->rigidwalls_outer[i]->getMaterial().setBounciness(0.6);
 		this->rigidwalls_outer[i]->getMaterial().setFrictionCoefficient(rp3d::decimal(0.06));
 		this->box_shapes_outer[i] = new rp3d::BoxShape(rp3d::Vector3(GameState::outer_walls_shape[i][0], GameState::outer_walls_shape[i][1], GameState::outer_walls_shape[i][2]));
 		this->box_proxyshapes_outer[i] = this->rigidwalls_outer[i]->addCollisionShape(this->box_shapes_outer[i], rp3d::Transform::identity(), 5000.0);
@@ -126,10 +137,10 @@ GameState::GameState() : time_step(1.0/60.0) {
 	//And 1 static rigid body for the surface of the pooltable
 	transform.setPosition(rp3d::Vector3(0.020, 0.0, 0.952));
 	this->surface = this->world->createRigidBody(transform);
-	this->box_shape = new rp3d::BoxShape(rp3d::Vector3(/*2.950*/3.0, 5.420, 0.001));
+	this->box_shape = new rp3d::BoxShape(rp3d::Vector3(2.950, 5.420, 0.001));
 	this->surface->setType(rp3d::BodyType::STATIC);
-	this->surface->getMaterial().setBounciness(0);
-	this->surface->getMaterial().setFrictionCoefficient(0.1);
+	this->surface->getMaterial().setBounciness(0.3);
+	this->surface->getMaterial().setFrictionCoefficient(0.25);
 	this->surface_proxyshape = this->surface->addCollisionShape(this->box_shape, rp3d::Transform::identity(), 5000.0);
 	
 	//Add 1 rigid high-friction surface below the pool table surface
@@ -198,7 +209,7 @@ void GameState::hit() {
     
 }
 
-glm::vec3 GameState::setCueStick() {
+void GameState::setCueStick() {
     //the cuestick should always lie along the line joining the camera with the cue ball
     glm::mat4 rot_init = glm::rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::vec3 cue_position = glm::vec3(this->balls[0]->model[3]);
@@ -219,7 +230,7 @@ glm::vec3 GameState::setCueStick() {
     glm::mat4 cuestick_transform =  glm::make_mat4(tmp);
     glm::mat4 translation_transform = glm::translate(boundary_position + this->cuestick->animate_factor * (cue_position - boundary_position));
     this->cuestick->model = translation_transform * cuestick_transform * rot_init;
-    return cuestick_dirn;
+    this->cuestick->aim = cuestick_dirn;
 }
 
 void GameState::updateState() {
@@ -293,4 +304,10 @@ void GameState::performBallCheck() {
     if (!this->turn_continued) {
         turn = (turn + 1) % 2;
     }
+}
+
+void GameState::renderAim() {
+    //get the position of the cue stick;
+    glm::vec3 aim = this->cuestick->aim;
+
 }

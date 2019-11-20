@@ -65,7 +65,7 @@ int main() {
 		env_shader.setMat4("model", env->getModelMatrix());
 		env_shader.setMat4("view", fake_view);
 		env_shader.setMat4("projection", projection);
-		env->render(&env_shader);
+		//env->render(&env_shader);
 
 		axes_shader.use();
 		axes_shader.setMat4("view", view);
@@ -82,22 +82,28 @@ int main() {
 		gamestate->pooltable->render(&pooltable_diffuse_shader);
 
 		if (gamestate->simulation_complete) {
-			float radius = App::getMouseDrag();
-			if (radius != -1) gamestate->cuestick->animate(radius);
-			else gamestate->cuestick->unanimate();
-			glm::vec3 force_dirn = gamestate->setCueStick();
-			glm::vec3 force = 20.0f * gamestate->cuestick->animate_factor * force_dirn;
+			gamestate->setCueStick();
+			glm::vec3 force_dirn = gamestate->cuestick->aim;
+			force_dirn[2] = 0.0f;
+			glm::vec3 force = 25.0f * (1.0f - gamestate->cuestick->animate_factor) * force_dirn;
 			if (App::HIT) {
+				//std::cout << "HIT : " << gamestate->cuestick->animate_factor << std::endl;
 				gamestate->simulation_complete = false;
 				assert(gamestate->rigidbodies[0]);
 				gamestate->rigidbodies[0]->setLinearVelocity(rp3d::Vector3(force[0], force[1], force[2]));
-				gamestate->rigidbodies[0]->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 10.4));
+				gamestate->rigidbodies[0]->setAngularVelocity(rp3d::Vector3(0.0, 0.0, 10.0));
 				App::HIT = false;
 				//Apply force to the cue
 			}
+			float radius = App::getMouseDrag();
+			if (radius != -1) gamestate->cuestick->animate(radius);
+			else gamestate->cuestick->unanimate();
+			pooltable_diffuse_shader.setMat4("model", gamestate->cuestick->getModelMatrix());
+			//renderAim();
+			//it should be line till the first intersection with a ball/wall and at that point render a small fake ball
+			gamestate->renderAim();
+			gamestate->cuestick->render(&pooltable_diffuse_shader);
 		}
-		pooltable_diffuse_shader.setMat4("model", gamestate->cuestick->getModelMatrix());
-		gamestate->cuestick->render(&pooltable_diffuse_shader);
 
 		
 		//after the simulation has completed for this frame, update the positions

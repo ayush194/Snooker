@@ -1,7 +1,7 @@
 #include "App.h"
 
-unsigned int App::SCR_WIDTH = 1280;
-unsigned int App::SCR_HEIGHT = 800;
+unsigned int App::SCR_WIDTH = 800;
+unsigned int App::SCR_HEIGHT = 600;
 float App::LAST_TIME = 0.0;
 float App::DELTA_TIME = 0.0;
 float App::CURSOR_POS[2] = {static_cast<float>(App::SCR_WIDTH) / 2, 
