@@ -67,6 +67,9 @@ App::App() {
     //Enable depth test
     glEnable(GL_DEPTH_TEST);
 
+    //Enable Anti-Aliasing
+    glEnable(GL_LINE_SMOOTH);
+
     //if you enable GL_CULL_FACE, then the cubemaps will not be rendered
     //this is because at any time, any face of the cube will not
     //lie inside the view frustum and so it will be culled

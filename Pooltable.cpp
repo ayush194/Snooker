@@ -65,10 +65,10 @@ glm::mat4& PoolTable::getModelMatrix() {
 }
 
 void PoolTable::drawBoundary() {
-    float boundary[] = {    holes[0][0], holes[0][1], 1.2, 1.0, 1.0, 0.0,   holes[2][0], holes[2][1], 1.2, 1.0, 1.0, 0.0, 
-                            holes[2][0], holes[2][1], 1.2, 1.0, 1.0, 0.0,   holes[3][0], holes[3][1], 1.2, 1.0, 1.0, 0.0, 
-                            holes[3][0], holes[3][1], 1.2, 1.0, 1.0, 0.0,   holes[5][0], holes[5][1], 1.2, 1.0, 1.0, 0.0,
-                            holes[5][0], holes[5][1], 1.2, 1.0, 1.0, 0.0,   holes[0][0], holes[0][1], 1.2, 1.0, 1.0, 0.0};
+    float boundary[] = {    holes[0][0], holes[0][1], 1.152, 1.0, 1.0, 0.0,   holes[2][0], holes[2][1], 1.152, 1.0, 1.0, 0.0, 
+                            holes[2][0], holes[2][1], 1.152, 1.0, 1.0, 0.0,   holes[3][0], holes[3][1], 1.152, 1.0, 1.0, 0.0, 
+                            holes[3][0], holes[3][1], 1.152, 1.0, 1.0, 0.0,   holes[5][0], holes[5][1], 1.152, 1.0, 1.0, 0.0,
+                            holes[5][0], holes[5][1], 1.152, 1.0, 1.0, 0.0,   holes[0][0], holes[0][1], 1.152, 1.0, 1.0, 0.0};
     unsigned int vbo_boundary, vao_boundary;
     glGenVertexArrays(1, &vao_boundary);
     glGenBuffers(1, &vbo_boundary);

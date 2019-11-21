@@ -78,6 +78,7 @@ GameState::GameState() : time_step(1.0/60.0) {
     for(int i = 0; i < 16; i++) {
 		this->balls[i] = new Ball(i);
 	}
+    this->fakeball = new Ball(16);
 
     //using ReactPhysics3d library
 	rp3d::Vector3 gravity(0.0, 0.0, -9.81);
@@ -306,8 +307,72 @@ void GameState::performBallCheck() {
     }
 }
 
-void GameState::renderAim() {
-    //get the position of the cue stick;
-    glm::vec3 aim = this->cuestick->aim;
+glm::vec3 GameState::getIntersection(const glm::vec3& pos, const glm::vec3& dirn) {
+    //finds the intersection of a ray emanating from point pos and in direction dirn with the scene
+    for(float t = 0.0f; t < 15.0f; t += 0.1f) {
+        for(int i = 1; i < 16; i++) {
+            glm::vec3 ball_pos = this->balls[i]->model[3];
+            if (glm::distance(ball_pos, pos + t * dirn) <= 2 * Ball::radius) {
+                //collision occurs here
+                return pos + t * dirn;
+            }
+        }
+    }
+    //the cue ball doesn't hit any other ball
+    /*
+    rp3d::Vector3 startpoint(pos[0], pos[1], pos[2]) ;
+    rp3d::Vector3 endpoint(pos[0] + 20.0f * dirn[0], pos[1] + 20.0f * dirn[1], pos[2] + 20.0f * dirn[2]) ;
+    rp3d::Ray ray(startpoint, endpoint);
+    rp3d::RaycastInfo raycast_info;
+    for(int i = 0; i < 6; i++) {
+        if (box_proxyshapes[i] && box_proxyshapes[i]->raycast(ray, raycast_info)) {
+            return glm::vec3(raycast_info.worldPoint.x, raycast_info.worldPoint.y, raycast_info.worldPoint.z);
+        }
+    }
+    for(int i = 0; i < 4; i++) {
+        if (box_proxyshapes_outer[i] && box_proxyshapes_outer[i]->raycast(ray, raycast_info))
+        return glm::vec3(raycast_info.worldPoint.x, raycast_info.worldPoint.y, raycast_info.worldPoint.z);
+    }
+    //return glm::vec3(endpoint[0], endpoint[1], endpoint[2]);
+    */
+    return pos + 15.0f * dirn;
+    /*
+    for(float i = 0.0f; i < 100.0f; i += 0.1f) {
+        //move along the line in steps of 0.1 and check if it's an intersection
+        //check for intersection -> a cueball, a wall, an outer wall
+        glm::vec3 checkpoint = pos + i * dirn;
+        //intersection check with the balls
+        
+    }
+    */
+}
 
+void GameState::renderAim() {
+    //get the aim of the cue stick;
+    glm::vec3 aim = this->cuestick->aim;
+    aim[2] = 0.0f;
+    glm::vec3 pos = this->balls[0]->model[3];
+    glm::vec3 int_pos = this->getIntersection(pos, aim);
+    float xyz[] = { pos[0], pos[1], pos[2], 0.0, 0.0, 1.0,  int_pos[0], int_pos[1], int_pos[2], 0.0, 0.0, 1.0};
+    unsigned int vbo_aim, vao_aim;
+    glGenVertexArrays(1, &vao_aim);
+    glGenBuffers(1, &vbo_aim);
+    glBindVertexArray(vao_aim);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_aim);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(xyz), xyz, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+    glLineWidth(10);
+    glDrawArrays(GL_LINES, 0, 2);
+
+    //unbind vertex arrays and buffers
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glDeleteVertexArrays(1, &vao_aim);
+    glDeleteBuffers(1, &vbo_aim);
+
+    //set position of fakeball
+    this->fakeball->model = glm::translate(int_pos);
 }

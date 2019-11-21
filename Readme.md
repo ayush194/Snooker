@@ -1,21 +1,20 @@
 ==============================================================================================
 
-|''''\  |''\  /''|  /'''| |'''''|  /'''|     /''''/ |'|  |'|    /\    |''''\   |'''''| |''''\ 
-| |_| | |   \/   | / /| | | |'| | / /| |    / /'''  | |__| |   /  \   | |'\ \  | |'''  | |_| |
-|    /  | |\  /| | \/ | | | | | | \/ | |    \ ''''| |  __  |  / __ \  | |  | | | ''|   |    / 
-| |\ \  | | \/ | |    | | | |_| |    | |     '''/ | | |  | | / /  \ \ | |_/ /  | |'    | |\ \ 
-|_| \_\ |_|    |_|    |_| |_____|    |_|    \''' /  |_|  |_| \/    \/ |____/   | ''''| |_| \_\
+-------------------------------------------SNOOKER--------------------------------------------
 
 ==============================================================================================
 
-This is a simple room shader built for Assignment 2 of CS360 course at IIT Kanpur.
-The room has been modelled and uv mapped in Blender. The source code provides the
+This is a simple Snooker game built for the course project of CS360 course at IIT Kanpur.
+The pooltable has been modelled and uv mapped in Blender. The source code provides the
 implementation for loading the object files and the textures (stb_library has been
-used for loading images as textures) as well as for rendering the loaded object.
-The shaders implement the Blinn-Phong model for Diffuse and Specular shading.
+used for loading images as textures) as well as for rendering the loaded object. The files
+also implement the gameplay and rendering algorithm for the game. Cubemaps have been used for
+adding an environment to the scene. The shaders implement the Blinn-Phong model for Diffuse 
+and Specular shading. More implementation details are mentioned in the report submitted.
 
 USE the mouse to look around, pan to zoom in and out, and the keys A, S, W, D to move 
-left, backwards, forwards and right respectively.
+around the pooltable in a fixed trajectory. Use the F key to fix lock the camera before shooting.
+Click and Drag to set the force of hit of the cuestick. Release the mouse press to hit the cue.
 
 -----------------------------------------------------------------------------------
 
@@ -41,10 +40,10 @@ Build Instructions:
    [GLFW](https://www.glfw.org/)
    [GLEW](http://glew.sourceforge.net/)
 
-2. If you are using OSX/Linux, simply compile using the shell file provided and then 
+2. If you are using OSX/Linux, simply compile using the Makefile provided and then 
    run the binary created :
-		$ sh compile.sh
-		$ ./rm101
+		$ make
+		$ ./snooker
 
 3. To rebuild the project, simply repeat step 2
 
@@ -55,12 +54,17 @@ Build Instructions:
 -----------------------------------------------------------------------------------
 
 
-Assignment 2
+Course Project
 Built for course CS360 (Intorduction to Computer Graphics)
-Name: Ayush Kumar
-Roll No: 170195
-Desg: B.Tech CSE, IIT Kanpur
 
-Designed and Developed by Ayush Kumar | © Copyrights Reserved
+Member1: 
+Ayush Kumar
+Roll No 170195
+B.Tech CSE, IIT Kanpur
+
+Member2: 
+Atul Kumar Pandey
+Roll No 150164
+B.Tech CSE, IIT Kanpur
 
 

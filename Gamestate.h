@@ -50,6 +50,7 @@ public:
 	PoolTable* pooltable;
 	CueStick* cuestick;
 	Ball* balls[16];
+    Ball* fakeball;
 
     bool simulation_complete;
     float accumulator;
@@ -67,6 +68,7 @@ public:
     void setCueStick();
     void updateState();
     void performBallCheck();
+    glm::vec3 getIntersection(const glm::vec3&, const glm::vec3&);
     void renderAim();
 };
 

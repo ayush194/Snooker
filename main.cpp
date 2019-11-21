@@ -73,6 +73,10 @@ int main() {
 		//draw axes
 		App::drawAxes();
 		gamestate->pooltable->drawBoundary();
+		if (gamestate->simulation_complete) {
+			gamestate->renderAim();
+			//render fakeball
+		}
 		
 		pooltable_diffuse_shader.use();
 		pooltable_diffuse_shader.setMat4("model", gamestate->pooltable->getModelMatrix());
@@ -101,7 +105,6 @@ int main() {
 			pooltable_diffuse_shader.setMat4("model", gamestate->cuestick->getModelMatrix());
 			//renderAim();
 			//it should be line till the first intersection with a ball/wall and at that point render a small fake ball
-			gamestate->renderAim();
 			gamestate->cuestick->render(&pooltable_diffuse_shader);
 		}
 
@@ -127,6 +130,14 @@ int main() {
 			if (!gamestate->balls[i]->scored) {
 				gamestate->balls[i]->render(&ball_diffuse_shader);
 			}
+		}
+		if (gamestate->simulation_complete) {
+			//render fakeball
+			ball_diffuse_shader.setMat4("model", gamestate->fakeball->getModelMatrix());
+			//switch to wireframe mode
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			gamestate->fakeball->render(&ball_diffuse_shader);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
 		//accesorial actions

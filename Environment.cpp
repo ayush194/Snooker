@@ -29,7 +29,14 @@ std::vector<std::vector<std::string> > Environment::cubemap_paths = {
             "/Users/ayushk/Desktop/Snooker/skyboxes/icelake/posy.jpg",
             "/Users/ayushk/Desktop/Snooker/skyboxes/icelake/negy.jpg",
             "/Users/ayushk/Desktop/Snooker/skyboxes/icelake/posz.jpg",
-            "/Users/ayushk/Desktop/Snooker/skyboxes/icelake/negz.jpg"}
+            "/Users/ayushk/Desktop/Snooker/skyboxes/icelake/negz.jpg"},
+        {   
+            "/Users/ayushk/Desktop/Snooker/skyboxes/field/posx.jpg",
+            "/Users/ayushk/Desktop/Snooker/skyboxes/field/negx.jpg",
+            "/Users/ayushk/Desktop/Snooker/skyboxes/field/posy.jpg",
+            "/Users/ayushk/Desktop/Snooker/skyboxes/field/negy.jpg",
+            "/Users/ayushk/Desktop/Snooker/skyboxes/field/posz.jpg",
+            "/Users/ayushk/Desktop/Snooker/skyboxes/field/negz.jpg"}
 };
 
 Environment::Environment() {
@@ -58,7 +65,7 @@ Environment::Environment() {
     //these texture units will start pointing to the ball textures when the balls of id 0 and 1
     //are rendered. Hence the target GL_TEXTURE_2D of these two texture units should be rebound to
     //texture_id[0] and texture_id[1] before rendering.
-    this->texture_id = loadCubemap(Environment::cubemap_paths[2], 0);
+    this->texture_id = loadCubemap(Environment::cubemap_paths[4], 0);
     //printf("Environment id: %d, texture_id[0]: %d, texture_id[1] = %d\n", this->id, this->texture_id[0], this->texture_id[1]);
 }
 

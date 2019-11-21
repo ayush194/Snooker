@@ -28,14 +28,14 @@ enum CameraMovement {
 #define _R_     5.0f
 #define _B_(i, j) PoolTable::holes[(i)][(j)]
 // Default camera values
-const float _speed       =  0.5f;
+const float _speed       =  0.3f;
 const float _sensitivity =  0.1f;
 const float _zoom        =  45.0f;
 const glm::vec3 _path[]  =  {   
-                                {-3.028,  -5.473,   1.200},
-                                {-3.028,   5.473,   1.200},
-                                { 3.054,   5.473,   1.200},
-                                { 3.054,  -5.473,   1.200}
+                                {-3.028,  -5.473,   1.152},
+                                {-3.028,   5.473,   1.152},
+                                { 3.054,   5.473,   1.152},
+                                { 3.054,  -5.473,   1.152}
                             };
 
 //const float _speed = 1.0;
