@@ -3,19 +3,13 @@
 std::vector<Vertex> Environment::vertices;
 std::vector<Material*> Environment::mtls;
 std::vector<std::vector<std::string> > Environment::cubemap_paths = {
-        {   "skyboxes/ame_bluefreeze/bluefreeze_rt.tga",
-            "skyboxes/ame_bluefreeze/bluefreeze_lf.tga",
-            "skyboxes/ame_bluefreeze/bluefreeze_up.tga",
-            "skyboxes/ame_bluefreeze/bluefreeze_dn.tga",
-            "skyboxes/ame_bluefreeze/bluefreeze_ft.tga",
-            "skyboxes/ame_bluefreeze/bluefreeze_bk.tga"},
         {
-            "right.jpg",
-            "left.jpg",
-            "top.jpg",
-            "bottom.jpg",
-            "front.jpg",
-            "back.jpg"},
+            "skyboxes/lake/posx.jpg",
+            "skyboxes/lake/negx.jpg",
+            "skyboxes/lake/posy.jpg",
+            "skyboxes/lake/negy.jpg",
+            "skyboxes/lake/posz.jpg",
+            "skyboxes/lake/negz.jpg"},
         {   
             "skyboxes/mountain/posx.jpg",
             "skyboxes/mountain/negx.jpg",
@@ -36,7 +30,14 @@ std::vector<std::vector<std::string> > Environment::cubemap_paths = {
             "skyboxes/field/posy.jpg",
             "skyboxes/field/negy.jpg",
             "skyboxes/field/posz.jpg",
-            "skyboxes/field/negz.jpg"}
+            "skyboxes/field/negz.jpg"},
+        {   
+            "skyboxes/sunset/posx.jpg",
+            "skyboxes/sunset/negx.jpg",
+            "skyboxes/sunset/posy.jpg",
+            "skyboxes/sunset/negy.jpg",
+            "skyboxes/sunset/posz.jpg",
+            "skyboxes/sunset/negz.jpg"}
 };
 
 Environment::Environment() {
@@ -65,7 +66,7 @@ Environment::Environment() {
     //these texture units will start pointing to the ball textures when the balls of id 0 and 1
     //are rendered. Hence the target GL_TEXTURE_2D of these two texture units should be rebound to
     //texture_id[0] and texture_id[1] before rendering.
-    this->texture_id = loadCubemap(Environment::cubemap_paths[4], 0);
+    this->texture_id = loadCubemap(Environment::cubemap_paths[3], 0);
     //printf("Environment id: %d, texture_id[0]: %d, texture_id[1] = %d\n", this->id, this->texture_id[0], this->texture_id[1]);
 }
 
