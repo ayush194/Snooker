@@ -47,14 +47,14 @@ sudo cmake .
 sudo make
 sudo make install
 
-cp -r src/containers /usr/local/include/reactphysics3d/
-cp -r src/memory /usr/local/include/reactphysics3d/
-cp -r src/mathematics /usr/local/include/reactphysics3d/
-cp -r src/body /usr/local/include/reactphysics3d/
-cp -r src/collision /usr/local/include/reactphysics3d/
-cp -r src/engine /usr/local/include/reactphysics3d/
-cp -r src/constraint /usr/local/include/reactphysics3d/
-cp -r src/utils /usr/local/include/reactphysics3d/
+sudo cp -r src/containers /usr/local/include/reactphysics3d/
+sudo cp -r src/memory /usr/local/include/reactphysics3d/
+sudo cp -r src/mathematics /usr/local/include/reactphysics3d/
+sudo cp -r src/body /usr/local/include/reactphysics3d/
+sudo cp -r src/collision /usr/local/include/reactphysics3d/
+sudo cp -r src/engine /usr/local/include/reactphysics3d/
+sudo cp -r src/constraint /usr/local/include/reactphysics3d/
+sudo cp -r src/utils /usr/local/include/reactphysics3d/
 
 1. You need to have the libraries glm (v0.9.8), GLFW and GLEW installed to compile this program.
    Make sure that the .dylib/.a/.so files for these libraries are located in /usr/local/lib

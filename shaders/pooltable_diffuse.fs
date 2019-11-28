@@ -25,8 +25,11 @@ void main() {
     float costheta = 0.4 * max(dot(lightdir, normal), 0.0);
     //blinn-phong
     float cosalpha = 0.3 * pow(max(dot(h, normal), 0.0), 4.0);
-    
-    vec3 tex_diff = vec3(texture(diffuse_textures[vmtl_idx], vuv).rgb);
+    vec3 tex_diff;
+    switch(uint(vmtl_idx)) {
+        case(0u) : tex_diff = vec3(texture(diffuse_textures[0], vuv).rgb); break;
+        case(1u) : tex_diff = vec3(texture(diffuse_textures[1], vuv).rgb); break;
+    }
     //vec3 tex_spec = vec3(texture(specular_textures[vmtl_idx], vuv).rgb);
     //vec4 amb = vec4(0.1, 0.1, 0.1, 1.0);
     //vec4 diff = vec4(costheta, costheta, costheta, 1.0);

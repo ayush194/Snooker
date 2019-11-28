@@ -6,6 +6,7 @@
 #include <cstring>
 #include <sstream>
 #include <unordered_map>
+#include <unistd.h>
 
 #include <glm/glm.hpp>
 
@@ -63,9 +64,23 @@ bool parseMTL(
 		} else if (strcmp(line_header, "illum") == 0) {
 			fscanf(mtlfile, "%u\n", &newmtl->illum);
 		} else if (strcmp(line_header, "map_Kd") == 0) {
-			fscanf(mtlfile, "%s\n", newmtl->map_kd);
+			//convert relative path to absolute path
+			getcwd(newmtl->map_kd, 100);
+			uint size = strlen(newmtl->map_kd);
+			newmtl->map_kd[size] = '/';
+			strcpy(newmtl->map_kd+size+1, path);
+			int i = strlen(newmtl->map_kd)-1;
+			while (newmtl->map_kd[i] != '/') i--;
+			fscanf(mtlfile, "%s\n", newmtl->map_kd+i+1);
 		} else if (strcmp(line_header, "map_Ks") == 0) {
-			fscanf(mtlfile, "%s\n", newmtl->map_ks);
+			//convert relative path to absolute path
+			getcwd(newmtl->map_ks, 100);
+			uint size = strlen(newmtl->map_ks);
+			newmtl->map_ks[size] = '/';
+			strcpy(newmtl->map_ks+size+1, path);
+			int i = strlen(newmtl->map_ks)-1;
+			while (newmtl->map_ks[i] != '/') i--;
+			fscanf(mtlfile, "%s\n", newmtl->map_ks+i+1);
 		} else {
 			// Probably a comment, eat up the rest of the line
 			char stupid_buffer[1000];

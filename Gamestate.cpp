@@ -253,7 +253,7 @@ void GameState::performBallCheck() {
     this->fault_occurred = false;
     for(int i = 0; i < 16; i++) {
         if (!rigidbodies[i]) continue;
-        glm::vec3 translation = glm::column(this->balls[i]->model, 3);
+        glm::vec3 translation = glm::vec3(this->balls[i]->model[3]);
         if (translation[2] < 0.962) {
             //this ball has entered a hole, hence remove it from the scene
             if (i == 0) {
@@ -311,7 +311,7 @@ glm::vec3 GameState::getIntersection(const glm::vec3& pos, const glm::vec3& dirn
     //finds the intersection of a ray emanating from point pos and in direction dirn with the scene
     for(float t = 0.0f; t < 15.0f; t += 0.1f) {
         for(int i = 1; i < 16; i++) {
-            glm::vec3 ball_pos = this->balls[i]->model[3];
+            glm::vec3 ball_pos = glm::vec3(this->balls[i]->model[3]);
             if (glm::distance(ball_pos, pos + t * dirn) <= 2 * Ball::radius) {
                 //collision occurs here
                 return pos + t * dirn;
@@ -351,7 +351,7 @@ void GameState::renderAim() {
     //get the aim of the cue stick;
     glm::vec3 aim = this->cuestick->aim;
     aim[2] = 0.0f;
-    glm::vec3 pos = this->balls[0]->model[3];
+    glm::vec3 pos = glm::vec3(this->balls[0]->model[3]);
     glm::vec3 int_pos = this->getIntersection(pos, aim);
     float xyz[] = { pos[0], pos[1], pos[2], 0.0, 0.0, 1.0,  int_pos[0], int_pos[1], int_pos[2], 0.0, 0.0, 1.0};
     unsigned int vbo_aim, vao_aim;

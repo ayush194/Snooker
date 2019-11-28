@@ -8,7 +8,7 @@ Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
 illum 2
-map_Kd /Users/ayushk/Desktop/Snooker/textures/wood.jpg
+map_Kd textures/wood.jpg
 
 newmtl fabric_green
 Ns 0
@@ -17,4 +17,4 @@ Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
 illum 2
-map_Kd /Users/ayushk/Desktop/Snooker/textures/fabric_green.jpg
+map_Kd textures/fabric_green.jpg
