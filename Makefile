@@ -6,11 +6,25 @@ CPPFLAGS = -std=c++11 -Wall -g
 CC = g++
 INCLUDEPATH = -I/usr/local/include/reactphysics3d -I/usr/local/include -I.
 INCLUDES = opengl_includes.h glm_includes.h
-LIBS = -lglfw -lglew -lreactphysics3d
-FRAMEWORKS = -framework OpenGL 
+LIBS = -lglfw -lreactphysics3d
+UNAME := $(shell uname)
+FRAMEWORKS = 
+ifeq ($(UNAME), Linux)
+	FRAMEWORKS += -lGL -lGLU
+	LIBS += -lGLEW
+endif
+ifeq ($(UNAME), Darwin)
+	FRAMEWORKS += -framework OpenGL
+	LIBS += -lglew
+endif
+
 
 ${TARGET} : ${OBJS}
-	@${CC} ${CPPFLAGS} ${FRAMEWORKS} ${LIBS} ${INCLUDEPATH} -o ${TARGET} ${OBJS}
+	#Note that on Linux, the linker flags ${LIBS} ${FRAMEWORKS} are required to be given at the end
+	#but on OSX there is no such necessity. The linker goes through the files from left to right, 
+	#and it has to know which symbols from libraries you need, before the libraries are processed.
+	#view post https://stackoverflow.com/questions/53028300/cant-link-glfw-library-with-its-header-file-on-ubuntu-18-04
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -o ${TARGET} ${OBJS} ${LIBS} ${FRAMEWORKS}
 
 main.o : main.cpp ${INCLUDES}
 	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c main.cpp

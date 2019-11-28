@@ -39,6 +39,7 @@ public:
     static void mouseButtonCallback(GLFWwindow*, int, int, int);
     static void scrollCallback(GLFWwindow*, double, double);
     static void framebufferSizeCallback(GLFWwindow*, int, int);
+    static void errorCallback(int, const char*);
     static void processInput();
     static float getMouseDrag();
     static unsigned int loadTexture(char const*, unsigned int);

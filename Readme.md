@@ -20,6 +20,42 @@ Click and Drag to set the force of hit of the cuestick. Release the mouse press 
 
 Build Instructions:
 
+#working gcc compiler
+
+apt install g++
+
+sudo apt-get update
+sudo apt-get install libglfw3-dev
+sudo apt-get install libglew-dev
+sudo apt-get install libglm-dev
+
+gcc -xc++ -E -v -
+
+
+#change compiler to gcc
+
+#Make sure you have git installed 
+#make utility required
+
+sudo apt-get install cmake
+sudo apt-get install git
+
+
+git clone https://github.com/DanielChappuis/reactphysics3d.git --branch master
+cd reactphysics3d
+sudo cmake .
+sudo make
+sudo make install
+
+cp -r src/containers /usr/local/include/reactphysics3d/
+cp -r src/memory /usr/local/include/reactphysics3d/
+cp -r src/mathematics /usr/local/include/reactphysics3d/
+cp -r src/body /usr/local/include/reactphysics3d/
+cp -r src/collision /usr/local/include/reactphysics3d/
+cp -r src/engine /usr/local/include/reactphysics3d/
+cp -r src/constraint /usr/local/include/reactphysics3d/
+cp -r src/utils /usr/local/include/reactphysics3d/
+
 1. You need to have the libraries glm (v0.9.8), GLFW and GLEW installed to compile this program.
    Make sure that the .dylib/.a/.so files for these libraries are located in /usr/local/lib
    Also make sure that the include files for these are located in /usr/local/include

@@ -18,6 +18,9 @@ Camera App::CAMERA = Camera();
 //GameState* App::gamestate = NULL;
 
 App::App() {
+    // Set error callback
+    glfwSetErrorCallback(App::errorCallback);
+
     // Initialise GLFW
     if(!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
@@ -212,3 +215,8 @@ void App::mouseButtonCallback(GLFWwindow* window, int button, int action, int mo
 void App::scrollCallback(GLFWwindow* window, double offsetx, double offsety) {
     App::CAMERA.processMouseScroll(offsety);
 }
+
+void App::errorCallback(int error, const char* description) {
+    puts(description);
+}
+
