@@ -65,7 +65,7 @@ int main() {
 		env_shader.setMat4("model", env->getModelMatrix());
 		env_shader.setMat4("view", fake_view);
 		env_shader.setMat4("projection", projection);
-		//env->render(&env_shader);
+		env->render(&env_shader);
 
 		axes_shader.use();
 		axes_shader.setMat4("view", view);
