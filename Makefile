@@ -5,7 +5,9 @@ OBJS = main.o App.o Environment.o Gamestate.o Pooltable.o Cuestick.o Ball.o objl
 CPPFLAGS = -std=c++11 -Wall -g
 CC = g++
 INCLUDEPATH = -I/usr/local/include/reactphysics3d -I/usr/local/include -I.
-INCLUDES = opengl_includes.h glm_includes.h
+INCLUDES = Headers/opengl_includes.h Headers/glm_includes.h
+INCLUDES_DIR = Headers
+SOURCES_DIR = Sources
 LIBS = -lglfw -lreactphysics3d
 UNAME := $(shell uname)
 FRAMEWORKS = 
@@ -29,31 +31,33 @@ ${TARGET} : ${OBJS}
 main.o : main.cpp ${INCLUDES}
 	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c main.cpp
 
-App.o : App.cpp App.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c App.cpp
+App.o : ${SOURCES_DIR}/App.cpp $(INCLUDES_DIR)/App.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/App.cpp
 
-Environment.o : Environment.cpp Environment.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c Environment.cpp
+Environment.o : ${SOURCES_DIR}/Environment.cpp $(INCLUDES_DIR)/Environment.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Environment.cpp
 
-Gamestate.o : Gamestate.cpp Gamestate.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c Gamestate.cpp
+Gamestate.o : ${SOURCES_DIR}/Gamestate.cpp $(INCLUDES_DIR)/Gamestate.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Gamestate.cpp
 
-Pooltable.o : Pooltable.cpp Pooltable.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c Pooltable.cpp
+Pooltable.o : ${SOURCES_DIR}/Pooltable.cpp $(INCLUDES_DIR)/Pooltable.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Pooltable.cpp
 
-Cuestick.o : Cuestick.cpp Cuestick.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c Cuestick.cpp
+Cuestick.o : ${SOURCES_DIR}/Cuestick.cpp $(INCLUDES_DIR)/Cuestick.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Cuestick.cpp
 
-Ball.o : Ball.cpp Ball.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c Ball.cpp
+Ball.o : ${SOURCES_DIR}/Ball.cpp $(INCLUDES_DIR)/Ball.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Ball.cpp
 
-objloader.o : objloader.cpp objloader.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c objloader.cpp
+objloader.o : ${SOURCES_DIR}/objloader.cpp $(INCLUDES_DIR)/objloader.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/objloader.cpp
 
-texture.o : texture.cpp texture.h ${INCLUDES}
-	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c texture.cpp
+texture.o : ${SOURCES_DIR}/texture.cpp $(INCLUDES_DIR)/texture.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/texture.cpp
 
-App.h Environment.h Gamestate.h Pooltable.h Cuestick.h Ball.h objloader.h texture.h : 
+$(INCLUDES_DIR)/App.h $(INCLUDES_DIR)/Environment.h $(INCLUDES_DIR)/Gamestate.h :
+$(INCLUDES_DIR)/Pooltable.h $(INCLUDES_DIR)/Cuestick.h $(INCLUDES_DIR)/Ball.h :
+$(INCLUDES_DIR)/objloader.h $(INCLUDES_DIR)/texture.h : 
 
 ${INCLUDES} : 
 

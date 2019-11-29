@@ -3,16 +3,16 @@
 //  Copyright © 2018 Ayush Kumar. All rights reserved.
 //
 
-#include "App.h"
+#include <Headers/App.h>
 
 //model loading library
-#include "objloader.hpp"
-#include "shader.h"
+#include <Headers/objloader.hpp>
+#include <Headers/shader.h>
 
-#include "Gamestate.h"
-#include "glm_includes.h"
-#include "stb_image/stb_image.h"
-#include "Environment.h"
+#include <Headers/Gamestate.h>
+#include <Headers/glm_includes.h>
+#include <stb_image/stb_image.h>
+#include <Headers/Environment.h>
 
 #include <iostream>
 #include <vector>
