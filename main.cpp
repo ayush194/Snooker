@@ -71,7 +71,7 @@ int main() {
 		axes_shader.setMat4("view", view);
 		axes_shader.setMat4("projection", projection);
 		//draw axes
-		App::drawAxes();
+		//App::drawAxes();
 		gamestate->pooltable->drawBoundary();
 		if (gamestate->simulation_complete) {
 			gamestate->renderAim();
