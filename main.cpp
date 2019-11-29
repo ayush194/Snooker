@@ -146,6 +146,7 @@ int main() {
 	glfwTerminate();
 	//deallocate everything that was dynamically created (using the new keyword);
 	delete gamestate;
+	delete env;
 
 	return 0;
 }
