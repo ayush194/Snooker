@@ -91,7 +91,7 @@ cd Snooker
 make
 ```
 
-Now you can run the program by simply running the binary created.
+Run the program by simply running the binary created.
 ```
 ./snooker
 ```
