@@ -44,19 +44,19 @@ brew install glew glfw glm
 
 4. [ReactPhysics3D](https://www.reactphysics3d.com/) is a library for performing efficient physics simulation of a rigid body system with arbitrary motion and force parameters.
 
-To install this dependency, make sure you have git and cmake installed. If not, install them using
+To install this dependency, make sure you have cmake installed. If not, install them using
 
 ## For Linux
 ```
-sudo apt-get install git cmake
+sudo apt-get install cmake
 ```
 
 ## For OSX
 ```
-brew install git cmake
+brew install cmake
 ```
 
-To install the reactphysics3d library, first clone the official github repository and then build it using cmake and make. The rest of the installation with remain the same ofr both Linux and OSX machines.
+To install the reactphysics3d library, first clone the official github repository and then build it using cmake and make. The rest of the installation will remain the same for both Linux and OSX machines.
 
 ## For Linux and OSX
 ```
@@ -67,7 +67,7 @@ sudo make
 sudo make install
 ```
 
-For some reason, the makefiles generated for the project do not copy the include files contained in the folders containers, memory, mathematics, body, collision, engine, constraint, utils to the standard include folder(most likely /usr/local/include) for the library. Hence we need to do this manually. Locate the directory where the reactphysics3d library's header files are installed (most likely /usr/local/include). Copy the remaining header files into the same directory. Also, this directory must be present in the compiler's standard search paths. You can check this using,
+For some reason, the makefiles generated for the project do not copy the include files contained in the directories reactphysics3d/src/containers, reactphysics3d/src/memory, reactphysics3d/src/mathematics, reactphysics3d/src/body, reactphysics3d/src/collision, reactphysics3d/src/engine, reactphysics3d/src/constraint, reactphysics3d/src/utils to the standard include directory where the library's header files are installed. Hence we need to do this manually. Locate the directory where the reactphysics3d library's header files are installed (most likely /usr/local/include/reactphysics3d). Copy the remaining header files into the same directory. Also, the parent directory (/usr/local/include in this case) must be present in the compiler's standard search paths. You can check this using,
 ```
 g++ -xc++ -E -v -
 ```
