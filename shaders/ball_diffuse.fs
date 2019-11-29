@@ -27,6 +27,8 @@ void main() {
     //blinn-phong
     float cosalpha = 0.3 * pow(max(dot(h, normal), 0.0), 4.0);
     
+    //GLSL versions 1.30 and further do not support varibale based indexing with sampler2D objects
+    //But GLSL version 1.30 also intriduced switch-case statements which we will use here to perform the same task
     vec3 tex_diff;
     switch(uint(vmtl_idx)) {
         case(0u) : tex_diff = vec3(texture(diffuse_textures[0], vuv).rgb); break;
