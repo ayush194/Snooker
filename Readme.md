@@ -8,7 +8,7 @@
 
 This is a simple Snooker game built for the course project of CS360 course at IIT Kanpur. The pooltable has been modelled and UV mapped in Blender. The source code provides the implementation for loading the object files and the textures (stb_library has been used for loading images as textures) as well as for rendering the loaded object. The files also implement the gameplay and rendering algorithm for the game. Cubemaps have been used for adding an environment to the scene. The shaders implement the Blinn-Phong model for Diffuse and Specular shading. More implementation details are mentioned in the report submitted.
 
-![Screenshott](screenshot.jpg?raw=true "Title")
+![Screenshot](https://raw.githubusercontent.com/ayush194/Snooker/master/screenshot.png?raw=true "Screenshot")
 
 Use the mouse to look around, pan to zoom in and out, and the keys A, S, W, D to move around the pooltable in a fixed trajectory. Use the F key to lock the camera before shooting.
 Click and Drag to set the force of hit of the cuestick. Release the mouse press to hit the cue.
