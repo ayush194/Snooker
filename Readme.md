@@ -21,44 +21,67 @@ To build the project, a working C++11 compiler is needed.
 For linux one can use the preinstalled g++ compiler.
 On OSX, the clang compiler comes packaged with XCode. 
 
-### Dependencies
+## Dependencies
 1. [GLFW](https://www.glfw.org/) is a window loading library for OpenGL. It initializes the window for rendering. It also provides event handlers for receiving input and displaying the output.
 
 2. [GLEW](http://glew.sourceforge.net/) is a function loading library for OpenGL. It loads OpenGL function pointers at runtime.
 
 3. [glm](https://glm.g-truc.net/0.9.9/index.html) is a library for performing efficient matrix operations. Matrix operations are frequently performed in OpenGL.
 
+4. [FreeType](https://www.freetype.org/) is library for efficiently producing high-quality glyph images for vector and bitmap fornt formats.
+
 Install these dependencies as they are required for building the project.
 
-## For Linux
+### For Linux
 ```
 sudo apt-get update
 sudo apt-get install libglfw3-dev libglew-dev libglm-dev
 ```
 
-## For OSX
+### For OSX
 The easiest way to install these libraries is using the brew package manager. For a more custom install, build using the source files from the latest development branch.
 ```
 brew install glew glfw glm
 ```
 
-4. [ReactPhysics3D](https://www.reactphysics3d.com/) is a library for performing efficient physics simulation of a rigid body system with arbitrary motion and force parameters.
+### For OSX and Linux
+To install the FreeType font rendering library, visit their website and download their latest release. At the time of writing, this was [FreeType 2.10.0](https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.tar.gz). Unzip the tar, and build using make.
+```
+tar -xvf freetype-2.10.0.tar.gz
+cd freetype-2.10.0
+sudo make
+sudo make install
+```
+
+After install, make sure that the include files are located in the standard include directory /usr/local/include/freetype2. If not, explicitly copy the header files into it.
+```
+sudo cp -r include /usr/local/include/freetype2
+```
+
+Removed the tar file as well as the untarred directory as they are no longer needed.
+```
+cd ..
+sudo rm -rf freetype-2.10.0
+sudo rm freetype-2.10.0.tar.gz
+```
+
+5. [ReactPhysics3D](https://www.reactphysics3d.com/) is a library for performing efficient physics simulation of a rigid body system with arbitrary motion and force parameters.
 
 To install this dependency, make sure you have cmake installed. If not, install them using
 
-## For Linux
+### For Linux
 ```
 sudo apt-get install cmake
 ```
 
-## For OSX
+### For OSX
 ```
 brew install cmake
 ```
 
 To install the reactphysics3d library, first clone the official github repository and then build it using cmake and make. The rest of the installation will remain the same for both Linux and OSX machines.
 
-## For Linux and OSX
+### For Linux and OSX
 ```
 git clone https://github.com/DanielChappuis/reactphysics3d.git --branch master
 cd reactphysics3d
@@ -84,6 +107,12 @@ sudo cp -r src/constraint /usr/local/include/reactphysics3d/
 sudo cp -r src/utils /usr/local/include/reactphysics3d/
 ```
 
+Remove the cloned directory as it is no longer needed,
+```
+cd ..
+sudo rm -rf reactphysics3d
+```
+
 Now simply clone the Snooker repository and build using make.
 ```
 git clone https://github.com/ayush194/Snooker
@@ -91,7 +120,9 @@ cd Snooker
 make
 ```
 
-Run the program by simply running the binary created.
+# Running the game
+
+Run the game by simply running the binary created.
 ```
 ./snooker
 ```

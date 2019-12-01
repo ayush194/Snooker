@@ -24,7 +24,7 @@ int main() {
 	GameState* gamestate = new GameState();
 	Environment::loadVertexData();
 	Environment* env = new Environment();
-	Font* arial_font = new Font("Fonts/TimesNewRoman.ttf");
+	Font* arial_font = new Font("Fonts/TimesNewRomanBold.ttf");
 	//App::gamestate = gamestate;
 	
 	//building shaders
@@ -65,11 +65,6 @@ int main() {
 		glm::mat4 persp_projection = App::getPerspectiveProjectionMatrix();
 		//remove translation to create a fake_view matrix
 		glm::mat4 fake_view = glm::mat4(glm::mat3(view));
-
-		text_shader.use();
-		text_shader.setMat4("projection", ortho_projection);
-		text_shader.setVec3("text_color", glm::vec3(0.5, 0.8f, 0.2f));
-		arial_font->render(&text_shader, "Snooker", 25.0f, 25.0f, 1.0f);
 
 		env_shader.use();
 		env_shader.setMat4("model", env->getModelMatrix());
@@ -149,6 +144,20 @@ int main() {
 			gamestate->fakeball->render(&ball_diffuse_shader);
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
+
+		//render scores
+		text_shader.use();
+		text_shader.setMat4("projection", ortho_projection);
+		//render players' scores
+		glm::vec3 color[2] = {glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)};
+		std::cout << gamestate->turn << std::endl;
+		if (gamestate->turn) { 
+			std::swap(color[0], color[1]);
+		}
+		text_shader.setVec3("text_color", color[0]);
+		arial_font->render(&text_shader, std::string("Player 0 : ") + std::to_string(gamestate->score[0]), 25.0f, 570.0f, 0.4f);
+		text_shader.setVec3("text_color", color[1]);
+		arial_font->render(&text_shader, std::string("Player 1 : ") + std::to_string(gamestate->score[1]), 540.0f, 570.0f, 0.4f);
 
 		//accesorial actions
 		App::endFrame();
