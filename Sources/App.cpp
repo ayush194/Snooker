@@ -84,6 +84,10 @@ App::App() {
 
     // Cull triangles which normal is not towards the camera
     //glEnable(GL_CULL_FACE);
+
+    // For rendering fonts
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void App::updateFrame() {
@@ -114,8 +118,12 @@ glm::mat4 App::getViewMatrix() {
     return App::CAMERA.getViewMatrix();
 }
 
-glm::mat4 App::getProjectionMatrix() {
+glm::mat4 App::getPerspectiveProjectionMatrix() {
     return glm::perspective(glm::radians(App::CAMERA.zoom), (float)App::SCR_WIDTH / App::SCR_HEIGHT, 0.1f, 10000.0f);
+}
+
+glm::mat4 App::getOrthographicProjectionMatrix() {
+    return glm::ortho(0.0f, static_cast<GLfloat>(App::SCR_WIDTH), 0.0f, static_cast<GLfloat>(App::SCR_HEIGHT));
 }
 
 void App::drawAxes() {

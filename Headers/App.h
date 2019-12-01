@@ -34,7 +34,8 @@ public:
     static void endFrame();
     static void clearColor();
     static glm::mat4 getViewMatrix();
-    static glm::mat4 getProjectionMatrix();
+    static glm::mat4 getPerspectiveProjectionMatrix();
+    static glm::mat4 getOrthographicProjectionMatrix();
     static void cursorPosCallback(GLFWwindow*, double, double);
     static void mouseButtonCallback(GLFWwindow*, int, int, int);
     static void scrollCallback(GLFWwindow*, double, double);

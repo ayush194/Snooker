@@ -8,6 +8,7 @@
 //model loading library
 #include <Headers/objloader.hpp>
 #include <Headers/shader.h>
+#include <Headers/Font.h>
 
 #include <Headers/Gamestate.h>
 #include <Headers/glm_includes.h>
@@ -23,6 +24,7 @@ int main() {
 	GameState* gamestate = new GameState();
 	Environment::loadVertexData();
 	Environment* env = new Environment();
+	Font* arial_font = new Font("Fonts/TimesNewRoman.ttf");
 	//App::gamestate = gamestate;
 	
 	//building shaders
@@ -30,6 +32,7 @@ int main() {
 	Shader ball_diffuse_shader("shaders/ball_diffuse.vs", "shaders/ball_diffuse.fs");
 	Shader axes_shader("shaders/axes.vs", "shaders/axes.fs");
 	Shader env_shader("shaders/cubemap.vs", "shaders/cubemap.fs");
+	Shader text_shader("shaders/text.vs", "shaders/text.fs");
 
 	App::updateFrame();
 	int iters = 0;
@@ -54,22 +57,29 @@ int main() {
 		//std::cout << "entered main loop" << std::endl;
 		//std::cout << "Delta time : " << App::DELTA_TIME << std::endl;
 		//std::cout << "theta: " << App::CAMERA.theta << std::endl;
+		
 
 		//create transform matrices
 		glm::mat4 view = App::getViewMatrix();
-		glm::mat4 projection = App::getProjectionMatrix();
+		glm::mat4 ortho_projection = App::getOrthographicProjectionMatrix();
+		glm::mat4 persp_projection = App::getPerspectiveProjectionMatrix();
 		//remove translation to create a fake_view matrix
 		glm::mat4 fake_view = glm::mat4(glm::mat3(view));
+
+		text_shader.use();
+		text_shader.setMat4("projection", ortho_projection);
+		text_shader.setVec3("text_color", glm::vec3(0.5, 0.8f, 0.2f));
+		arial_font->render(&text_shader, "Snooker", 25.0f, 25.0f, 1.0f);
 
 		env_shader.use();
 		env_shader.setMat4("model", env->getModelMatrix());
 		env_shader.setMat4("view", fake_view);
-		env_shader.setMat4("projection", projection);
+		env_shader.setMat4("projection", persp_projection);
 		env->render(&env_shader);
 
 		axes_shader.use();
 		axes_shader.setMat4("view", view);
-		axes_shader.setMat4("projection", projection);
+		axes_shader.setMat4("projection", persp_projection);
 		//draw axes
 		//App::drawAxes();
 		gamestate->pooltable->drawBoundary();
@@ -81,7 +91,7 @@ int main() {
 		pooltable_diffuse_shader.use();
 		pooltable_diffuse_shader.setMat4("model", gamestate->pooltable->getModelMatrix());
 		pooltable_diffuse_shader.setMat4("view", view);
-		pooltable_diffuse_shader.setMat4("projection", projection);
+		pooltable_diffuse_shader.setMat4("projection", persp_projection);
 		pooltable_diffuse_shader.setVec3("glightpos", glm::vec3(3,4,5));
 		gamestate->pooltable->render(&pooltable_diffuse_shader);
 
@@ -123,7 +133,7 @@ int main() {
 
 		ball_diffuse_shader.use();
 		ball_diffuse_shader.setMat4("view", view);
-		ball_diffuse_shader.setMat4("projection", projection);
+		ball_diffuse_shader.setMat4("projection", persp_projection);
 		ball_diffuse_shader.setVec3("glightpos", glm::vec3(3,4,5));
 		for(int i = 0; i < 16; i++) {
 			ball_diffuse_shader.setMat4("model", gamestate->balls[i]->getModelMatrix());
@@ -147,6 +157,7 @@ int main() {
 	//deallocate everything that was dynamically created (using the new keyword);
 	delete gamestate;
 	delete env;
+	delete arial_font;
 
 	return 0;
 }

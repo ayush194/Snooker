@@ -1,14 +1,14 @@
 SHELL = /bin/bash
 
 TARGET = snooker
-OBJS = main.o App.o Environment.o Gamestate.o Pooltable.o Cuestick.o Ball.o objloader.o texture.o
+OBJS = main.o App.o Environment.o Gamestate.o Pooltable.o Cuestick.o Ball.o Font.o objloader.o texture.o
 CPPFLAGS = -std=c++11 -Wall -g
 CC = g++
-INCLUDEPATH = -I/usr/local/include/reactphysics3d -I/usr/local/include -I.
+INCLUDEPATH = -I/usr/local/include/reactphysics3d -I/usr/local/include -I/usr/local/include/freetype2 -I.
 INCLUDES = Headers/opengl_includes.h Headers/glm_includes.h
 INCLUDES_DIR = Headers
 SOURCES_DIR = Sources
-LIBS = -lglfw -lreactphysics3d
+LIBS = -lglfw -lreactphysics3d -lfreetype
 UNAME := $(shell uname)
 FRAMEWORKS = 
 ifeq ($(UNAME), Linux)
@@ -49,6 +49,9 @@ Cuestick.o : ${SOURCES_DIR}/Cuestick.cpp $(INCLUDES_DIR)/Cuestick.h ${INCLUDES}
 Ball.o : ${SOURCES_DIR}/Ball.cpp $(INCLUDES_DIR)/Ball.h ${INCLUDES}
 	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Ball.cpp
 
+Font.o : ${SOURCES_DIR}/Font.cpp $(INCLUDES_DIR)/Font.h ${INCLUDES}
+	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/Font.cpp
+
 objloader.o : ${SOURCES_DIR}/objloader.cpp $(INCLUDES_DIR)/objloader.h ${INCLUDES}
 	@${CC} ${CPPFLAGS} ${INCLUDEPATH} -c ${SOURCES_DIR}/objloader.cpp
 
@@ -57,7 +60,7 @@ texture.o : ${SOURCES_DIR}/texture.cpp $(INCLUDES_DIR)/texture.h ${INCLUDES}
 
 $(INCLUDES_DIR)/App.h $(INCLUDES_DIR)/Environment.h $(INCLUDES_DIR)/Gamestate.h :
 $(INCLUDES_DIR)/Pooltable.h $(INCLUDES_DIR)/Cuestick.h $(INCLUDES_DIR)/Ball.h :
-$(INCLUDES_DIR)/objloader.h $(INCLUDES_DIR)/texture.h : 
+$(INCLUDES_DIR)/Font.h $(INCLUDES_DIR)/objloader.h $(INCLUDES_DIR)/texture.h : 
 
 ${INCLUDES} : 
 
