@@ -145,6 +145,7 @@ int main() {
 			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
+		
 		//render scores
 		text_shader.use();
 		text_shader.setMat4("projection", ortho_projection);
@@ -158,6 +159,7 @@ int main() {
 		arial_font->render(&text_shader, std::string("Player 0 : ") + std::to_string(gamestate->score[0]), 25.0f, 570.0f, 0.4f);
 		text_shader.setVec3("text_color", color[1]);
 		arial_font->render(&text_shader, std::string("Player 1 : ") + std::to_string(gamestate->score[1]), 540.0f, 570.0f, 0.4f);
+		
 
 		//accesorial actions
 		App::endFrame();

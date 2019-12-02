@@ -1,3 +1,4 @@
+# ScenicSnooker                                         
                                         _                              _             
                      ___  ___ ___ _ __ (_) ___   ___ _ __   ___   ___ | | _____ _ __ 
                     / __|/ __/ _ \ '_ \| |/ __| / __| '_ \ / _ \ / _ \| |/ / _ \ '__|
@@ -15,7 +16,7 @@ Click and Drag to set the force of hit of the cuestick. Release the mouse press 
 
 ---------------
 
-# Build Instructions:
+## Build Instructions:
 
 To build the project, a working C++11 compiler is needed.
 For linux one can use the preinstalled g++ compiler.
