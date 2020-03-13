@@ -131,7 +131,7 @@ Run the game by simply running the binary created.
 ---------------
 
 ## Course Project
-Built for course CS360 (Intorduction to Computer Graphics)
+Built for course CS360 (Introduction to Computer Graphics)
 
 Ayush Kumar
 Roll No 170195
